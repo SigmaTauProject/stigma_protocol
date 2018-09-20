@@ -118,23 +118,26 @@ window.Div = {
 	
 	
 	eventListener: function(event, callback) {
-		return {type:"eventListener", event:event, callback:callback};
+		if (typeof callback == "undefined" || callback == null) {
+			return {type:"eventListener", eventListeners:event};
+		}
+		else {
+			return {type:"eventListener", event:event, callback:callback};
+		}
 	},
-	eventListeners: function(eventListeners) {
-		return {type:"eventListener", eventListeners:eventListeners};
-	},
-	event: function(event, callback) {
-		return {type:"eventListener", event:event, callback:callback};
-	},
-	events: function(eventListeners) {
-		return {type:"eventListener", eventListeners:eventListeners};
-	},
+	eventListeners	: function(event, callback) {	return window.Div.eventListener(event, callback);	},
+	event	: function(event, callback) {	return window.Div.eventListener(event, callback);	},
+	events	: function(event, callback) {	return window.Div.eventListener(event, callback);	},
+	listener	: function(event, callback) {	return window.Div.eventListener(event, callback);	},
+	listeners	: function(event, callback) {	return window.Div.eventListener(event, callback);	},
+	on	: function(event, callback) {	return window.Div.eventListener(event, callback);	},
+	
 	
 	
 	attribute: function(attribute, value) {
 		return {type:"attribute", attribute:attribute, value:value};
 	},
-	attributes: function(attributes) {	
+	attributes: function(attributes) {
 		return {type:"attribute", attributes:attributes};
 	},
 	

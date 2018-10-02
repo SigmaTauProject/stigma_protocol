@@ -1,4 +1,4 @@
-module ship_.entity;
+module ship_.entity_;
 
 import std.experimental.logger;
 import cst_;

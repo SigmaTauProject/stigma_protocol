@@ -19,7 +19,6 @@ class Main {
 		
 		while (true) {
 			sleep(gameTick.msecs);
-			auto newNetworks =	network	.update()	;
 			/*null*/	gameLogic	.update()	;
 			/*null*/	shipMgr	.update(newNetworks)	;
 		}

@@ -1,3 +1,5 @@
+module loose_.net_msg_;
+
 import std.traits;
 import cst_;
 
@@ -39,11 +41,11 @@ ubyte[] encodeNetMsg(Msg)(Msg msg, ubyte[] addedHeader) {
 	ubyte[] msgData = msgLen.cst!ubyte~addedHeader~msgBody;
 	return msgData;
 }
-Msg decodeNetMsg(Msg)(ubyte[] msgData, ubyte addedHeader) {
+Msg decodeNetMsg(Msg)(const(ubyte)[] msgData, ubyte addedHeader) {
 	return decodeNetMsg!Msg(msgData,[addedHeader]);
 }
-Msg decodeNetMsg(Msg)(ubyte[] msgData, ubyte[] addedHeader) {
-	Msg dnm(Msg)(ubyte[] msgData,ref ubyte offset) {
+Msg decodeNetMsg(Msg)(const(ubyte)[] msgData, ubyte[] addedHeader) {
+	Msg dnm(Msg)(const(ubyte)[] msgData,ref ubyte offset) {
 		static if (isDynamicArray!(Msg)) {
 			ubyte len = msgData[0];
 			offset++;

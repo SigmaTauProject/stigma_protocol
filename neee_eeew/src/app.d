@@ -9,7 +9,7 @@ void main(string[] args) {
 		args = args.remove(1);
 		int gameTick = 500;
 		args.getopt("gameTick|tick|t",&gameTick);
-		new GalacticMain(loopTime);
+		new GalacticMain(gameTick);
 	}
 	else if (args[1] == "ship") {
 		args = args.remove(1);

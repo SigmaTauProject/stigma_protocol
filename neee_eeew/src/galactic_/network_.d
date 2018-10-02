@@ -19,7 +19,7 @@ class NetworkMaster {
 			int counter = 0;
 			log("Socket connected");
 			auto newNetwork = new Network(&socket);
-			newNetworks ~= newNetwork;
+			_newNetworks ~= newNetwork;
 			while (socket.connected) {
 				sleep(1000.msecs);
 			}
@@ -27,20 +27,34 @@ class NetworkMaster {
 			log("Socket disconnected");
 		}
 		void main() {
+			this.newNetworks = NewNetworks(&_newNetworks);
+			
 			listeners = listenTCP(1234, &handleConnection);
 			listeners.log;
 		}
 		main();
 	}
-	auto update() {
-		auto toReturn = newNetworks;
-		newNetworks = [];
-		return toReturn;
-	}
+	
+	NewNetwork newNetworks;
 	 
 	private {
 		TCPListener[]	listeners	;
-		Network[]	newNetworks	= []	; 
+		Network[] _newNetworks = [];
+		
+		struct NewNetworks {
+			Network[]* _newNetworks;
+			@property bool empty() {
+				return _newNetworks.length==0;
+			}
+			@property Network front() {
+				assert(!empty);
+				return (*_newNetworks)[0];
+			}
+			void popFront() {
+				assert(!empty);
+				*_newNetworks = (*_newNetworks)[1..$];
+			}
+		}
 	}
 }
 

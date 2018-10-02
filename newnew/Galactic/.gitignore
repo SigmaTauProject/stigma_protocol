@@ -1,0 +1,14 @@
+.dub
+docs.json
+__dummy.html
+docs/
+galactic.so
+galactic.dylib
+galactic.dll
+galactic.a
+galactic.lib
+galactic-test-*
+*.exe
+*.o
+*.obj
+*.lst

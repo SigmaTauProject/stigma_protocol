@@ -1,0 +1,14 @@
+.dub
+docs.json
+__dummy.html
+docs/
+neeeeew.so
+neeeeew.dylib
+neeeeew.dll
+neeeeew.a
+neeeeew.lib
+neeeeew-test-*
+*.exe
+*.o
+*.obj
+*.lst

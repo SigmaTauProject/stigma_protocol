@@ -4,6 +4,10 @@ authors "jonathan"
 copyright "Copyright © 2018, jonathan"
 license "proprietary"
 
+targetPath	"build"
+sourcePaths	"src" "src_galactic" "src_ship"
+importPaths	"src" "src_galactic" "src_ship"
+
 dependency "cst"	version="~>1.0"
 dependency "queue"	version="~>1.0"
 

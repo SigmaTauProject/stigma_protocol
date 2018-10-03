@@ -10,13 +10,17 @@ export default class Socket {
 	_connect() {
 		console.log("[Socket]","Connecting...");
 		this.socket = new WebSocket(_getURL());
+		this.socket.binaryType="arraybuffer";
 		
-		this.socket.onopen	= this._onOpen	;
-		this.socket.onmessage	= this._onMsg	;
-		this.socket.onclose	= this._onClose	;
-		this.socket.onerror	= this._onError	;
+		this.socket.onopen	= this._onOpen	.bind(this);
+		this.socket.onmessage	= this._onMsg	.bind(this);
+		this.socket.onclose	= this._onClose	.bind(this);
+		this.socket.onerror	= this._onError	.bind(this);
 	}
 	
+	send(msg) {
+		this.socket.send(msg);
+	}
 	getMsgs() {
 		var msgs	= this._msgs	;
 		this._msgs	= []	;
@@ -30,8 +34,8 @@ export default class Socket {
 		return this.getMsgs()[Symbol.iterator]();
 	}
 	
-	_onMsg(msg) {
-		this._msgs.push(msg);
+	_onMsg(e) {
+		this._msgs.push(new Uint8Array(e.data));
 	}
 	_onOpen() {
 		console.log("[Socket]","Connected");
@@ -41,7 +45,7 @@ export default class Socket {
 		console.log("[Socket]","Disconnected");
 		this.connected = false;
 	}
-	_orError(e) {
+	_onError(e) {
 		console.log("[Socket]",e);
 	}
 	

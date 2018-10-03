@@ -1,20 +1,18 @@
 
-import UI from "./ui.mjs";
-import Ship from "./ship.mjs";
-import Network from "./network.mjs";
+import UI	from "./ui.mjs"	;
+import Ship	from "./ship.mjs"	;
+import Socket	from "./socket.mjs"	;
+import Network	from "./network.mjs"	;
 
 
 export default class Main {
-	constructor(socket) {
-		this.socket = socket;
-		
-		
-		
+	constructor() {
+		this.socket	= new Socket	(	);
 		this.ship	= new Ship	(	);
 	////	////this.gameLogic	= new GameLogic	(this.world	);
 	////	////this.input	= new Input	(this.gameLogic	);
 		this.ui	= new UI	(this.ship, /*this.gameLogic, this.input*/	);
-		this.network	= new Network	(this.ship, socket	);
+		this.network	= new Network	(this.ship, this.socket	);
 	////	this.ui.	init();
 	////	this.network	.init();
 	////	/*this.gameLogic	.init();*/

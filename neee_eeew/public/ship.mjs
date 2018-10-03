@@ -3,14 +3,19 @@ import IdArray from "./idArray.mjs";
 
 
 export default class Ship {
-	constructor() {
-		this.components = [];
+	constructor(network) {
+		this.network	= network	;
+		this.componentTypes	= []	;
+		this.components	= []	;
 	}
 	
 	msg_components(msg) {
 		this.components = msg.components.each(type=>{
-			if (type=="metaRadar") {
+			if (type==0 || type=="metaRadar") {
 				return new MetaRadar(this);
+			}
+			else {
+				return new UnknownComponent(this);
 			}
 			////else if (type=="thruster") {
 			////	return new Thruster(this);
@@ -38,11 +43,16 @@ export default class Ship {
 	////}
 }
 
-
-class MetaRadar {
-	constructor(ship) {
-		this.type	= "metaRadar"	;
+class BaseComponent {
+	constructor(type, ship) {
+		this.type	= type	;
 		this.ship	= ship	;
+	}
+}
+
+class MetaRadar extends BaseComponent {
+	constructor(ship, ...args) {
+		super("metaRadar", ...args);
 		this.us	= {pos:vec(),rot:0}	;
 		this.entities	= {}	;
 		this.removed	= []	;
@@ -65,6 +75,11 @@ class MetaRadar {
 				delete this.entities[id];
 			}
 		}
+	}
+}
+class UnknownComponent extends BaseComponent {
+	constructor(ship, ...args) {
+		super("unknownComponent", ...args);
 	}
 }
 

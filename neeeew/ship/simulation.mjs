@@ -1,9 +1,0 @@
-
-
-class Simulation {
-	constructor() {
-	}
-}
-
-
-

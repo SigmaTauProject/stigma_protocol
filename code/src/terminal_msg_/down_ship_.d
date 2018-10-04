@@ -6,19 +6,19 @@ import cst_;
 import loose_.net_msg_;
 
 import terminal_msg_.component_type_;
+public import terminal_msg_.up_;
 
 enum MsgType {
 	components	,
 }
 
-struct UnknownMsg {
-	const(ubyte)[] msgData;
-	
-	@property
-	MsgType type() {
-		assert(msgData.ptr && msgData.length>=3);
-		return msgData[2].cst!MsgType;
-	}
+
+
+
+@property
+MsgType type(UnknownMsg msg) {
+	assert(msg.msgData.ptr && msg.msgData.length>=3);
+	return msg.msgData[2].cst!MsgType;
 }
 
 

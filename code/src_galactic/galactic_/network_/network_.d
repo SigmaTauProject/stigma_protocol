@@ -16,7 +16,6 @@ import cst_;
 class NetworkMaster {
 	this() {
 		void handleConnection(TCPConnection socket) {
-			int counter = 0;
 			log("Socket connected");
 			auto newNetwork = new Network(&socket);
 			newNetworks ~= newNetwork;

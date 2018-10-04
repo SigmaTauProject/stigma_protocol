@@ -5,6 +5,8 @@ import cst_;
 
 import std.algorithm.iteration;
 
+static import terminal_msg_.up_;
+
 import ship_.world_	.world_	:	World	;
 import ship_.terminal_	.terminal_network_	:	TerminalNetwork	;
 import ship_.terminal_	.components_	;
@@ -16,6 +18,7 @@ class Ship {
 	}
 	void update(TerminalNetwork[] newTerminals) {
 		terminals ~= newTerminals;
+		//---Send to new
 		foreach (term; newTerminals) {
 			import loose_.net_msg_;
 			import terminal_msg_.down_ship_;
@@ -23,18 +26,35 @@ class Ship {
 			msg.components = this.componentTypes;
 			term.send(msg);
 		}
+		//---Get msgs
 		foreach (term; this.terminals) {
 			import loose_.net_msg_;
-			import terminal_msg_.up_ship_;
+			import terminal_msg_.up_;
 			foreach (unknownMsg; term.map!(msgData=>UnknownMsg(msgData))) {
 				unknownMsg.msgData.log;
-				final switch (unknownMsg.type) {
-					case MsgType.test:
-						auto msg = TestMsg(unknownMsg);
-						msg.testByte.log;
-						msg.testArray.log;
-						break;
+				if (unknownMsg.component==ubyte.max) {
+					onMsg(unknownMsg, term);
 				}
+				else {
+					if (unknownMsg.component >= this.components.length) {
+						log("msg from terminal is asking for a component that does not exist");
+					}
+					else {
+						if (this.components[unknownMsg.component] is null){
+							final switch (this.componentTypes[unknownMsg.component]) {
+								case ComponentType.metaRadar:
+									this.components[unknownMsg.component] = new MetaRadar(unknownMsg.component, this.world, null);
+									break;
+							}
+						}
+						this.components[unknownMsg.component].onMsg(unknownMsg, term);
+					}
+				}
+			}
+		}
+		foreach (component; components) {
+			if (!(component is null)) {
+				component.update();
 			}
 		}
 	}
@@ -51,6 +71,17 @@ class Ship {
 			assert(terminals.length==0, "cannot add components while terminal is connected");
 			this.componentTypes	~=type	;
 			this.components	~=null	;
+		}
+		
+		void onMsg(terminal_msg_.up_.UnknownMsg unknownMsg, TerminalNetwork from) {
+			import terminal_msg_.up_ship_;
+			final switch (unknownMsg.type) {
+				case MsgType.test:
+					auto msg = TestMsg(unknownMsg);
+					msg.testByte.log;
+					msg.testArray.log;
+					break;
+			}
 		}
 	}
 }

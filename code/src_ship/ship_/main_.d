@@ -23,7 +23,7 @@ class Main {
 		auto ship	= new Ship(world)	;
 		
 		while (true) {
-			sleep(50.msecs);
+			sleep(500.msecs);
 			galacticMgr.update();
 			ship.update(terminalNetworkMaster.getNewTerminals());
 		}

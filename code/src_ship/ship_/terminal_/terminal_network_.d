@@ -13,15 +13,17 @@ import std.algorithm.searching : endsWith;
 
 import core.time;
 
+
 class TerminalNetworkMaster {
 	this() {
 		void handleWebSocketConnection(scope WebSocket socket) {
-			int counter = 0;
 			log("WebSocket connected");
-			newTerminals ~= new TerminalNetwork(socket);
+			auto newTerminal  = new TerminalNetwork(socket);
+			newTerminals ~= newTerminal;
 			while (socket.connected) {
 				sleep(1.seconds);
 			}
+			newTerminal._vibeSocketHandlerStillExists = false;
 			log("WebSocket disconnected");
 		}
 		void handleMIME(scope HTTPServerRequest req, scope HTTPServerResponse res, ref string physicalPath) {
@@ -187,23 +189,33 @@ class TerminalNetwork {
 	private WebSocket socket;
 	
 	@property bool connected() {
-		return socket.connected;
+		return _vibeSocketHandlerStillExists && socket.connected;
 	}
+	bool _vibeSocketHandlerStillExists = true; // should only be changed by the vibe tcp connected handler function (`NetworkMaster.this.handleConnection`)
+	
 	//---Send
 	public {
 		void send(const(ubyte[]) msg) {
-			socket.send(msg);
+			if (connected) {
+				socket.send(msg);
+			}
 		}
 		alias put = send;
 	}
-	
+		
 	//---Receive
 	public {
 		@property bool empty() {
 			if (current != null)
 				return false;
-			if (socket.dataAvailableForRead) {
-				current = socket.receiveBinary();
+			if (connected && socket.dataAvailableForRead) {
+				try {
+					current = socket.receiveBinary();
+				}
+				catch (Throwable e) {
+					e.log;
+					return true;
+				}
 				return false;
 			}
 			return true;

@@ -4,7 +4,10 @@ import std.experimental.logger;
 import cst_;
 
 class Entity {
-	this() {}
+	this() {
+		assert(nextId<=ushort.max);
+		id = nextId++;
+	}
 	this(	float[2]	pos	,
 		float	ori	,
 		float[2]	vel	,
@@ -15,9 +18,14 @@ class Entity {
 		this.vel	= vel	;
 		this.anv	= anv	;
 	}
+	this();
 	float[2]	pos	;
 	float	ori	;
 	float[2]	vel	;
 	float	anv	;
+			
+	ushort	id	;
+	
+	static ushort nextId = 0;
 }
 

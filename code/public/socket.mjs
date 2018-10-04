@@ -4,6 +4,7 @@ export default class Socket {
 	constructor() {
 		this.connected	= false	;
 		this._msgs	= []	;
+		this._onConnectedCallbacks	= []	;
 		
 		this._connect();
 	}
@@ -34,12 +35,19 @@ export default class Socket {
 		return this.getMsgs()[Symbol.iterator]();
 	}
 	
+	onConnected(callback) {
+		this._onConnectedCallbacks.push(callback);
+	}
+	
 	_onMsg(e) {
 		this._msgs.push(new Uint8Array(e.data));
 	}
 	_onOpen() {
 		console.log("[Socket]","Connected");
 		this.connected = true;
+		for (let callback of this._onConnectedCallbacks) {
+			callback();
+		}
 	}
 	_onClose() {
 		console.log("[Socket]","Disconnected");

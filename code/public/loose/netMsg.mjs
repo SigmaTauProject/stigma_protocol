@@ -37,13 +37,21 @@ if (!Uint8Array.append) {
 export function encodeNetMsg(msg, addedHeader, msgStructure) {
 	addedHeader = new Uint8Array(addedHeader);
 	function enm(msg, msgStructure) {
-		if (msgStructure.type=="array"&&msgStructure.length==="dynamic") {
+		if (msgStructure.type=="array") {
 			assert(msg.length<=255);
 			let len = msg.length;
-			let msgData = new Uint8Array(1);
-			msgData[0] = len;
+			let msgData = new Uint8Array(0);
 			for (let val of msg) {
 				msgData = Uint8Array.append(msgData, enm(val,msgStructure.content));
+			}
+			if (msgStructure.length==="dynamic") {
+				let ne = new Uint8Array(msgData.byteLength+1);
+				ne.set(msgData,1);
+				ne[0] = len;
+				msgData = ne;
+			}
+			else {
+				assert(len == msgStructure.length);
 			}
 			return msgData;
 		}
@@ -63,6 +71,19 @@ export function encodeNetMsg(msg, addedHeader, msgStructure) {
 				msgData = new Uint8Array(1);
 				msgData[0] = msg;
 			}
+			else if (msgStructure.type=="ushort") {
+				assert(msg<256&&msg>=0);
+				assert(msg%1==0);
+				msgData = new Uint16Array(1);
+				msgData[0] = msg;
+				msgData = msgData.buffer;
+			}
+			else if (msgStructure.type=="float") {
+				assert(msg<256&&msg>=0);
+				msgData = new Float32Array(1);
+				msgData[0] = msg;
+				msgData = msgData.buffer;
+			}
 			return msgData;
 		}
 	}
@@ -79,9 +100,15 @@ export function decodeNetMsg(msgData, addedHeader, msgStructure) {
 	function dnm(msgData,msgStructure) {
 		var d = dnm;
 		var offset = 0;
-		if (msgStructure.type=="array"&&msgStructure.length==="dynamic") {
-			let len = msgData[0];
-			offset++;
+		if (msgStructure.type=="array") {
+			let len;
+			if (msgStructure.length==="dynamic") {
+				len = msgData[0];
+				offset++;
+			}
+			else {
+				len = msgStructure.length;
+			}
 			let msg = [];
 			for (var val=0;val<len;val++) {
 				let body,used;
@@ -109,6 +136,12 @@ export function decodeNetMsg(msgData, addedHeader, msgStructure) {
 		else {
 			if (msgStructure.type=="ubyte") {
 				return {msg:msgData[0],offset:1};
+			}
+			else if (msgStructure.type=="ushort") {
+				return {offset:2,msg:(new Uint16Array(msgData.buffer.slice(0,2)))[0]};
+			}
+			else if (msgStructure.type=="float") {
+				return {offset:4,msg:(new Float32Array(msgData.buffer.slice(0,4)))[0]};
 			}
 		}
 	}

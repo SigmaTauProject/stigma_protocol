@@ -7,6 +7,9 @@ import ship_.world_	.world_	:	World	;
 import ship_.galactic_	.galactic_network_	:	GalacticNetwork	;
 
 import std.algorithm.iteration;
+import std.algorithm.searching;
+import std.algorithm.mutation;
+import std.range;
 
 class GalacticMgr {
 	this(World world, GalacticNetwork network) {
@@ -21,7 +24,25 @@ class GalacticMgr {
 				final switch (unknownMsg.type) {
 					case MsgType.update:
 						auto msg = UpdateMsg(unknownMsg);
-						////msg.entities[0].pos.log;
+						import ship_.world_.entity_:Entity;
+						foreach (e; msg.entities){
+							auto found = this.world.entities.find!(a=>a.id==e.id);
+							if (!found.empty) {
+								found.front.pos	= e.pos	;
+								found.front.ori	= e.ori	;
+								found.front.id	= e.id	;
+								found.front.updated	= true	;
+							}
+							else {
+								this.world.entities ~= new Entity(e.pos,e.ori,e.id);
+								this.world.entities[$-1].updated=true;
+							}
+						}
+						for (long i=this.world.entities.length-1; i>=0; i--) {
+							if (!this.world.entities[i].updated) {
+								this.world.entities = this.world.entities.remove(i);
+							}
+						}
 						break;
 				}
 			}

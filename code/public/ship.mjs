@@ -10,7 +10,7 @@ export default class Ship {
 	}
 	
 	msg_components(msg) {
-		this.components = msg.components.each(type=>{
+		this.components = msg.components.map(type=>{
 			if (type==0 || type=="metaRadar") {
 				return new MetaRadar(this);
 			}

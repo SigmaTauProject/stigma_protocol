@@ -13,13 +13,16 @@ export default class Main {
 	////	////this.input	= new Input	(this.gameLogic	);
 		this.ui	= new UI	(this.ship, /*this.gameLogic, this.input*/	);
 		this.network	= new Network	(this.ship, this.socket	);
-	////	this.ui.	init();
-	////	this.network	.init();
-	////	/*this.gameLogic	.init();*/
-	////	/*this.input	.init();*/
-	////	
-		setInterval(this.update.bind(this), 50);
-	////	////setTimeout(this.update.bind(this), 1000);
+		
+		this.socket.onConnected((()=>{
+		////	this.ui.	init();
+			this.network	.init();
+		////	/*this.gameLogic	.init();*/
+		////	/*this.input	.init();*/
+		////	
+			setInterval(this.update.bind(this), 50);
+		////	////setTimeout(this.update.bind(this), 1000);
+		}).bind(this));
 	}
 	update() {
 	////	////this.ui	.updateInput();

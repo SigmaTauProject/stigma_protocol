@@ -1,4 +1,4 @@
-module galactic_msg_.entity_;
+module terminal_msg_.entity_;
 
 import std.experimental.logger;
 import cst_;

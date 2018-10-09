@@ -40,7 +40,7 @@ export class MetaRadar extends Base {
 					svg (	"g",
 						"radar-view",
 						(el)=>{this.view=el},
-						Div.attributes({transform:"scale(0.1)"}),
+						Div.attributes({transform:"scale(0.05)"}),
 					),
 				),
 				svg (	"circle",
@@ -70,7 +70,7 @@ export class MetaRadar extends Base {
 					ship.ui_radar[this.id].el = svg("polygon", "entity", Div.attributes({points:"-0.5,0.5 0,-0.5 0.5,0.5 0,0.25"}));
 					this.view.appendChild(ship.ui_radar[this.id].el);
 				}
-				ship.ui_radar[this.id].el.setAttribute("transform",`translate(${ship.pos[0]-pos[0]},${-(ship.pos[1]-pos[1])}) rotate(${Math.degrees(ship.rot)})`);
+				ship.ui_radar[this.id].el.setAttribute("transform",`translate(${ship.pos[0]-pos[0]},${-(ship.pos[1]-pos[1])}) rotate(${Math.degrees(ship.ori)})`);
 			}
 		}
 	}

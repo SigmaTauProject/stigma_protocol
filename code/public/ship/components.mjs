@@ -15,14 +15,17 @@ export class MetaRadar extends BaseComponent {
 		this.us	= {pos:vec(),rot:0}	;
 		this.entities	= {}	;
 		this.removed	= []	;
+		
+		this.send("stream",{});
 	}
 	msg_update(msg) {
+		log("update",msg);
 		this.removed = [];
 		this.us	= msg.us	;
 	 	for (var id of Object.keys(msg.entities)) {
 			if (id in this.entities) {
 				this.entities[id].pos	= msg.entities[id].pos	;
-				this.entities[id].rot	= msg.entities[id].rot	;
+				this.entities[id].ori	= msg.entities[id].ori	;
 	 		}
 			else {
 				this.entities[id] = msg.entities[id];

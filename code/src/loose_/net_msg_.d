@@ -39,7 +39,7 @@ ubyte[] encodeNetMsg(Msg)(Msg msg, ubyte[] addedHeader) {
 	}
 	auto msgBody = enm(msg);
 	auto msgLen = (1+addedHeader.length+msgBody.length);
-	assert(msgLen<=255);
+	assert(msgLen<256);
 	ubyte[] msgData = msgLen.cst!ubyte~addedHeader~msgBody;
 	return msgData;
 }

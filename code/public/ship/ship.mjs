@@ -45,7 +45,7 @@ export default class Ship {
 				let msgType	= downMsgType[this.componentTypes[msgData[1]]] .findKey(msgData[2]);
 				let msg = decodeNetMsg	(	msgData	,
 						[component,msgData[2]],
-						downMsgStructure	[	component	]
+						downMsgStructure	[	componentType	]
 							[	msgType	]
 					);
 				this.getComponent(component)["msg_"+msgType](msg);
@@ -184,7 +184,7 @@ var downMsgType = {
 		components	: 0	,
 	},
 	metaRadar:{
-		up	: 0	,
+		update	: 0	,
 	},
 	metaMove:{
 		update	: 0	,

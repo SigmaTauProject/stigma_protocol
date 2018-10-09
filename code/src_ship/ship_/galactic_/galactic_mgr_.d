@@ -25,6 +25,9 @@ class GalacticMgr {
 					case MsgType.update:
 						auto msg = UpdateMsg(unknownMsg);
 						import ship_.world_.entity_:Entity;
+						foreach (e; this.world.entities) {
+							e.updated = false;
+						}
 						foreach (e; msg.entities){
 							auto found = this.world.entities.find!(a=>a.id==e.id);
 							if (!found.empty) {

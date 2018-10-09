@@ -7,7 +7,7 @@ import std.getopt;
 void main(string[] args) {
 	if (args[1] == "galactic") {
 		args = args.remove(1);
-		int gameTick = 500;
+		int gameTick = 200;
 		args.getopt("gameTick|tick|t",&gameTick);
 		new GalacticMain(gameTick);
 	}

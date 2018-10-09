@@ -15,6 +15,7 @@ class Ship {
 	this(World world) {
 		this.world	= world	;
 		this.addComponent(ComponentType.metaRadar);
+		this.addComponent(ComponentType.metaMove);
 	}
 	void update(TerminalNetwork[] newTerminals) {
 		terminals ~= newTerminals;
@@ -44,6 +45,9 @@ class Ship {
 							final switch (this.componentTypes[unknownMsg.component]) {
 								case ComponentType.metaRadar:
 									this.components[unknownMsg.component] = new MetaRadar(unknownMsg.component, this.world, null);
+									break;
+								case ComponentType.metaMove:
+									this.components[unknownMsg.component] = new MetaMove(unknownMsg.component, this.world, null);
 									break;
 							}
 						}

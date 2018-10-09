@@ -6,6 +6,7 @@ import cst_;
 
 enum ComponentType : ubyte {
 	metaRadar	,
+	metaMove	,
 }
 
 

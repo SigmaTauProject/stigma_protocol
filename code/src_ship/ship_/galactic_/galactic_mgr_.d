@@ -43,6 +43,7 @@ class GalacticMgr {
 								this.world.entities = this.world.entities.remove(i);
 							}
 						}
+						world.entities.length.log;
 						break;
 				}
 			}

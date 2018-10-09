@@ -13,6 +13,8 @@ class Entity {
 		float[2]	vel	,
 		float	anv	,) {
 		
+		this();
+		
 		this.pos	= pos	;
 		this.ori	= ori	;
 		this.vel	= vel	;
@@ -26,6 +28,6 @@ class Entity {
 			
 	ushort	id	;
 	
-	static ushort nextId = 0;
+	static ushort nextId;
 }
 

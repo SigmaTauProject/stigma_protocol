@@ -1,2 +1,7 @@
 
-vibe.d for networking
+vibe.d
+	For networking
+	https://vibed.org/
+Sass
+	Used in terminal styling
+	http://sass-lang.com/

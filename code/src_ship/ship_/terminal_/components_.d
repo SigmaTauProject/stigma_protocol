@@ -79,4 +79,113 @@ class MetaRadar : Component {
 }
 
 
+class MetaMove : Component {
+	this(ubyte id, World world, Component[] delegate(ComponentType) getComponent) {
+		super(id, world, getComponent);
+	}
+	override @property ComponentType type() {
+		return ComponentType.metaMove;
+	}
+	override void update() {
+		foreach (reader; forwardReaders) {
+			sendForwardRead(reader);
+		}
+		foreach (reader; strafeReaders) {
+			sendStrafeRead(reader);
+		}
+		forwardReaders = [];
+		strafeReaders = [];
+		foreach (streamer; forwardStreamers) {
+			sendForwardRead(streamer);
+		}
+		foreach (streamer; strafeStreamers) {
+			sendStrafeRead(streamer);
+		}
+	}
+	override void onMsg(terminal_msg_.up_.UnknownMsg unknownMsg, TerminalNetwork from) {
+		import terminal_msg_.up_meta_move_;
+		final switch (unknownMsg.type) {
+			case MsgType.read:
+				log("metaRadar msg read:");
+				auto msg = ReadMsg(unknownMsg);
+				if (msg.axis == Axis.forward) {
+					forwardReaders ~= from;
+				}
+				else if (msg.axis == Axis.strafe) {
+					strafeReaders ~= from;
+				}
+				break;
+			case MsgType.stream:
+				log("metaRadar msg stream:");
+				auto msg = StreamMsg(unknownMsg);
+				if (msg.axis == Axis.forward) {
+					forwardStreamers ~= from;
+				}
+				else if (msg.axis == Axis.strafe) {
+					strafeStreamers ~= from;
+				}
+				break;
+			case MsgType.set:
+				log("metaRadar msg stream:");
+				auto msg = SetMsg(unknownMsg);
+				msg.value.log;
+				break;
+		}
+	}
+	
+	private {
+		TerminalNetwork[] forwardReaders	= []	;
+		TerminalNetwork[] forwardStreamers	= []	;
+		TerminalNetwork[] strafeReaders	= []	;
+		TerminalNetwork[] strafeStreamers	= []	;
+		
+		void sendForwardRead(TerminalNetwork to) {
+			import terminal_msg_.down_meta_move_;
+			import terminal_msg_.entity_ : Entity;
+			auto msg = UpdateMsg(this.id);
+			msg.axis	= Axis.forward	;
+			msg.value	= 0	;
+			to.send(msg);
+		}
+		void sendStrafeRead(TerminalNetwork to) {
+			import terminal_msg_.down_meta_move_;
+			import terminal_msg_.entity_ : Entity;
+			auto msg = UpdateMsg(this.id);
+			msg.axis	= Axis.strafe	;
+			msg.value	= 0	;
+			to.send(msg);
+		}
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

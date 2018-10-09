@@ -3,6 +3,8 @@ import Main	from "./main.mjs"	;
 
 import vec from "./glVec2/vec.mjs";
 window.vec = vec;
+import findKey from "./loose/findKey.mjs";
+Object.prototype.findKey = function(value){return findKey(this,value);}
 
 window.onload = function () {
 	////class ServerCom {

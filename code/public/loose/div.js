@@ -17,6 +17,9 @@ window.divNs = function (ns, type){
 			else if (arguments[i] instanceof HTMLElement || arguments[i] instanceof SVGElement) {
 				el.appendChild(arguments[i]);
 			}
+			else if (arguments[i].getEl) {
+				el.appendChild(arguments[i].getEl());
+			}
 			else if (arguments[i].nodeType!="undefined" && arguments[i].nodeType==Node.TEXT_NODE) {
 				el.appendChild(arguments[i]);
 			}
@@ -72,6 +75,9 @@ window.divNs = function (ns, type){
 					if (typeof arguments[i].child=="string") {
 						el.innerHTML += arguments[i].child;
 					}
+					else if (arguments[i].child.getEl) {
+						el.appendChild(arguments[i].child.getEl());
+					}
 					else {
 						el.appendChild(arguments[i].child);
 					}
@@ -80,6 +86,9 @@ window.divNs = function (ns, type){
 					for (child of attributes[i].children) {
 						if (typeof child=="string") {
 							el.innerHTML += child;
+						}
+						else if (child.getEl) {
+							el.appendChild(child.getEl());
 						}
 						else {
 							el.appendChild(child);

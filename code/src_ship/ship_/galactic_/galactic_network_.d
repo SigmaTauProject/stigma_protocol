@@ -10,9 +10,7 @@ import loose_.to_msg_;
 class GalacticNetwork {
 	this() {
 		void createSocket() {
-			auto s = connectTCP("127.0.0.1", 1234);
-			socket = &s;
-			_vibeSocketHandlerStillExists = true;
+			socket = connectTCP("127.0.0.1", 1234);
 			"Connected to server".log;
 			this.toMsg = new ToMsg(
 				(){
@@ -30,27 +28,26 @@ class GalacticNetwork {
 				},
 				(buffer=>buffer.length>0?buffer[0]:0)
 			);
-			while (s.connected){
-				import vibe.core.core : sleep;
-				import core.time;
-				sleep(1.seconds);
-			}
-			_vibeSocketHandlerStillExists = false;
-			"Disconnected from server".log;
+			////while (s.connected){
+			////	import vibe.core.core : sleep;
+			////	import core.time;
+			////	sleep(1.seconds);
+			////}
+			////_vibeSocketHandlerStillExists = false;
 		}
-		import vibe.core.core : runTask;
-		runTask(&createSocket);
+		////import vibe.core.core : runTask;
+		////runTask(&createSocket);
+		createSocket();
 	}
 	
 	private {
-		TCPConnection*	socket;
+		TCPConnection	socket;
 		ToMsg	toMsg;
 	}
 	
 	@property bool connected() {
-		return _vibeSocketHandlerStillExists && socket.connected;
+		return socket.connected;
 	}
-	private bool _vibeSocketHandlerStillExists = false; // should only be changed by the vibe tcp connected handler function (`this.this.createSocket`)
 	//---Send
 	public {
 		void send(const(ubyte[]) msg) {

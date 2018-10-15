@@ -1,12 +1,13 @@
-module galactic_.world_.entity_;
+module galactic_.game_logic_.entity_;
 
 import std.experimental.logger;
 import cst_;
 
-abstract class Entity {
+import world_ = galactic_.world_	.entity_	;
+
+class Entity : world_.Entity {
 	this() {
-		assert(nextId<=ushort.max);
-		id = nextId++;
+		super();
 	}
 	this(	float[2]	pos	,
 		float	ori	,
@@ -21,13 +22,7 @@ abstract class Entity {
 		this.anv	= anv	;
 	}
 	
-	float[2]	pos	;
-	float	ori	;
-	float[2]	vel	;
-	float	anv	;
-			
-	ushort	id	;
-	
-	static ushort nextId;
+	private world_.Entity getWorldEntity() {return this.cst!(world_.Entity);}
+	alias getWorldEntity this;
 }
 

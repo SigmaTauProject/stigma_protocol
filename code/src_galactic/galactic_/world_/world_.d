@@ -5,10 +5,10 @@ import cst_;
 
 import galactic_.world_	.entity_;
 
-class World {
+abstract class World {
 	this() {
 		
 	}
-	Entity[]	entities	;
+	abstract Entity[]	entities()	;
 }
 

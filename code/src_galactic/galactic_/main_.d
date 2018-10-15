@@ -13,8 +13,8 @@ import core.time;
 class Main {
 	this(int gameTick) {
 		auto network	= new NetworkMaster	;
-		auto world	= new World	;
-		auto gameLogic	= new GameLogic(world)	;
+		auto gameLogic	= new GameLogic	;
+		auto world	= gameLogic.getWorld	;
 		auto shipMgr	= new ShipMgr(world, gameTick)	;
 		
 		while (true) {

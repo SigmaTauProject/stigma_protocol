@@ -3,12 +3,14 @@ module galactic_.game_logic_.game_logic_;
 import std.experimental.logger;
 import cst_;
 
-import galactic_.world_	.entity_;
-import galactic_.world_	.world_;
+import world_ = galactic_.world_	.world_	;
+
+import galactic_.game_logic_	.entity_;
+import galactic_.game_logic_	.world_;
 
 class GameLogic {
-	this(World world) {
-		this.world	= world	;
+	this() {
+		this.world	= new World	;
 	}
 	void update() {
 		world.entities.length.log;
@@ -20,10 +22,16 @@ class GameLogic {
 			}
 			counter = 0;
 		}
+		
+		
+		//---physics
 		foreach (entity; world.entities) {
 			entity.pos[]	+= entity.vel[]	;
 			entity.ori	+= entity.anv	;
 		}
+	}
+	world_.World getWorld() {
+		return this.world.cst!(world_.World);
 	}
 	private {
 		World world;
@@ -31,4 +39,5 @@ class GameLogic {
 		uint counter = 0;
 	}
 }
+
 

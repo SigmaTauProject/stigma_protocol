@@ -5,10 +5,7 @@ import cst_;
 
 import galactic_.world_	.entity_;
 
-abstract class World {
-	this() {
-		
-	}
-	abstract Entity[]	entities()	;
+interface World {
+	Entity[]	entities()	;
 }
 

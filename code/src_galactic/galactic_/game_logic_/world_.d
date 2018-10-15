@@ -12,8 +12,8 @@ class World : world_.World{
 	this() {
 		
 	}
-	Entity[]	_entities	;
-	override Entity[] entities() {
+	Entity[]	entities	;
+	override world_entity_.Entity[] world_.World.entities() {
 		return this._entities;
 	}
 	

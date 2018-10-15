@@ -21,7 +21,10 @@ class TerminalNetworkMaster {
 			auto newTerminal  = new TerminalNetwork(socket);
 			newTerminals ~= newTerminal;
 			while (socket.connected) {
-				sleep(1.seconds);
+				sleep(10.msecs);
+				if (socket.dataAvailableForRead) {
+					newTerminal._dataAvailable = true;
+				}
 			}
 			newTerminal._vibeSocketHandlerStillExists = false;
 			log("WebSocket disconnected");
@@ -192,6 +195,7 @@ class TerminalNetwork {
 		return _vibeSocketHandlerStillExists && socket.connected;
 	}
 	bool _vibeSocketHandlerStillExists = true; // should only be changed by the vibe tcp connected handler function (`NetworkMaster.this.handleConnection`)
+	bool _dataAvailable = false; // Set to true by `NetworkMaster.this.handleConnection` set to false after data is read.
 	
 	//---Send
 	public {
@@ -208,9 +212,10 @@ class TerminalNetwork {
 		@property bool empty() {
 			if (current != null)
 				return false;
-			if (connected && socket.dataAvailableForRead) {
+			if (connected && _dataAvailable) {
 				try {
 					current = socket.receiveBinary();
+					_dataAvailable = false;
 				}
 				catch (Throwable e) {
 					e.log;

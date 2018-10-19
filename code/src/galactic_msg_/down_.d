@@ -24,7 +24,6 @@ struct UnknownMsg {
 
 
 class AddMsg {
-	import galactic_msg_.entity_;
 	static AddMsg opCall() {
 		return new AddMsg;
 	}
@@ -46,7 +45,6 @@ class AddMsg {
 	alias msgData this;
 }
 class RemoveMsg {
-	import galactic_msg_.entity_;
 	static RemoveMsg opCall() {
 		return new RemoveMsg;
 	}
@@ -66,7 +64,6 @@ class RemoveMsg {
 	alias msgData this;
 }
 class UpdateMsg {
-	import galactic_msg_.entity_;
 	static UpdateMsg opCall() {
 		return new UpdateMsg;
 	}
@@ -88,9 +85,8 @@ class UpdateMsg {
 	alias msgData this;
 }
 class MoveAllMsg {
-	import galactic_msg_.entity_;
 	static MoveAllMsg opCall() {
-		return new UpdateMsg;
+		return new MoveAllMsg;
 	}
 	static MoveAllMsg opCall(UnknownMsg msg) {
 		return MoveAllMsg(msg.msgData);

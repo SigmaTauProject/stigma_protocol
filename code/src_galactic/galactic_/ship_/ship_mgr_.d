@@ -7,7 +7,7 @@ import loose_.sleep_;
 import core.time;
 
 import galactic_.ship_	.ship_	:	Ship	;
-import galactic_.world_	.world_	:	World	;
+import galactic_.flat_world_	.world_	:	World	;
 import galactic_.network_	.network_	:	Network	;
 
 import std.algorithm.iteration	;

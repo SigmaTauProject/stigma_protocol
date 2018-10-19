@@ -6,7 +6,8 @@ import cst_;
 import loose_.sleep_;
 import core.time;
 
-import galactic_.world_	.world_	:	World	;
+import galactic_.flat_world_	.world_	:	World	;
+import galactic_.flat_world_	.entity_	:	Entity	;
 import galactic_.network_	.network_	:	Network	;
 
 import std.algorithm.iteration	;
@@ -33,14 +34,27 @@ class Ship {
 			import galactic_msg_.down_;
 			import galactic_msg_.entity_ : Entity;
 			auto msg = UpdateMsg();
-			msg.entities = world.entities.map!((a){auto e = new Entity(); e.pos=a.pos;e.ori=a.ori;e.id=a.id;return e;}).array;
+			msg.entities = world.entities.map!((a){auto e = new Entity(); e.pos=a.getPos;e.ori=a.getOri;e.id=getId(a);return e;}).array;
 			network.send(msg);
+		}
+	}
+	
+	ushort getId(Entity entity) {
+		if (auto idPtr = entity in ids) {
+			return *idPtr;
+		}
+		else {
+			ids[entity] = nextId;
+			return nextId++;
 		}
 	}
 	
 	private {
 		World	world	;
 		Network	network	;
+		
+		ushort[Entity]	ids	;
+		ushort	nextId	= 0;
 	}
 }
 

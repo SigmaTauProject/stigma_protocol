@@ -5,8 +5,9 @@ import cst_;
 
 
 interface Entity {
-	abstract float[2]	getPos();
-	abstract float	getOri();
+	abstract float[2]	getPos	();
+	abstract float	getOri	();
+	abstract bool	getInWorld	();
 }
 
 

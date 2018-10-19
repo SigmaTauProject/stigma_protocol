@@ -35,12 +35,14 @@ class World{
 	}
 	void addEntity(E)(E entity) if(!isAbstractClass!E) {
 		this._entities~=entity;
+		entity.inWorld = true;
 		static if (is(E:FlatEntity)) {
 			flatWorld.addEntity(entity);
 		}
 	}
 	void removeEntity(E)(E entity) if(!isAbstractClass!E) {
 		import std.algorithm;
+		entity.inWorld = false;
 		_entities = _enties.remove(_entities.countUntil(entity));
 		static if (is(E:FlatEntity)) {
 			flatWorld.removeEntity(entity);

@@ -78,7 +78,13 @@ class Ship {
 				}
 			}
 			//---Add new entities
-			foreach (i,entity; world.entities.find(syncedEntities[$-1])[1..$]) {
+			Entity[] newEntities =	syncedEntities.length>0
+				? world.entities.find(syncedEntities[$-1])[1..$]
+				: world.entities;
+			syncedEntities.reserve(syncedEntities.length+newEntities.length);
+			foreach (i,entity; newEntities) {
+				entityIds	~=nextId++	;
+				syncedEntities	~=entity	;
 				//---Send Msg to client
 				auto msg = AddMsg();
 				msg.id	= entityIds[i]	;

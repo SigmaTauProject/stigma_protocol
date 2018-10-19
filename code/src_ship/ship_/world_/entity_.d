@@ -16,6 +16,5 @@ class Entity {
 	ushort	id	;
 	float[2]	pos	;
 	float	ori	;
-	bool	updated	; // Used when galactic sends update (in ship_.galactic_.galactic_mgr_.d)
 }
 

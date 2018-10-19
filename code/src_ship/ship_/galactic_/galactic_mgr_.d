@@ -5,6 +5,7 @@ import cst_;
 
 import ship_.world_	.world_	:	World	;
 import ship_.galactic_	.galactic_network_	:	GalacticNetwork	;
+import ship_.world_	.entity_	:	Entity	;
 
 import std.algorithm.iteration;
 import std.algorithm.searching;
@@ -22,31 +23,25 @@ class GalacticMgr {
 			import galactic_msg_.down_;
 			foreach (unknownMsg; network.map!(msgData=>UnknownMsg(msgData))) {
 				final switch (unknownMsg.type) {
+					case MsgType.add:
+						auto msg = AddMsg(unknownMsg);
+						Entity entity = new Entity(msg.id,msg.pos,msg.ori);
+						entitiesById[msg.id] = entity;
+						world.entities ~= entity;
+						break;
 					case MsgType.update:
 						auto msg = UpdateMsg(unknownMsg);
-						import ship_.world_.entity_:Entity;
-						foreach (e; this.world.entities) {
-							e.updated = false;
-						}
-						foreach (e; msg.entities){
-							auto found = this.world.entities.find!(a=>a.id==e.id);
-							if (!found.empty) {
-								found.front.pos	= e.pos	;
-								found.front.ori	= e.ori	;
-								found.front.id	= e.id	;
-								found.front.updated	= true	;
-							}
-							else {
-								this.world.entities ~= new Entity(e.pos,e.ori,e.id);
-								this.world.entities[$-1].updated=true;
-							}
-						}
-						for (long i=this.world.entities.length-1; i>=0; i--) {
-							if (!this.world.entities[i].updated) {
-								this.world.entities = this.world.entities.remove(i);
-							}
-						}
+						Entity entity = entitiesById[msg.id];
+						entity.pos	= msg.pos	;
+						entity.ori	= msg.ori	;
 						break;
+					case MsgType.remove:
+						auto msg = RemoveMsg(unknownMsg);
+						world.entities = world.entities.remove(world.entities.countUntil(entitiesById[msg.id]));
+						entitiesById.remove(msg.id);
+						break;
+					case MsgType.moveAll:
+						assert(0);
 				}
 			}
 		}
@@ -61,6 +56,7 @@ class GalacticMgr {
 	
 	private {
 		World	world	;
+		Entity[ushort]	entitiesById	;
 		int	gameTick	;
 		GalacticNetwork	network	;
 	}

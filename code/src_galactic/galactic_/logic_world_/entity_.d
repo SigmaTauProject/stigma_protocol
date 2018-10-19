@@ -31,6 +31,8 @@ abstract class Entity{
 	
 	float[2]	pos	;
 	float	ori	;
+			
+	bool	inWorld	= false	; // Changed in `world.addEntity` and `.removeEntity`
 }
 private abstract
 class PhysicEntity : Entity {
@@ -90,8 +92,9 @@ class Sun : Orbiting,FlatEntity {
 		super.update;
 	}
 	
-	float[2]	getPos	() { return pos;	}
-	float	getOri	() { return ori;	}
+	float[2]	getPos	() { return pos	; }
+	float	getOri	() { return ori	; }
+	bool	getInWorld	() { return inWorld	; }
 }
 class Planet : Orbiting,FlatEntity {
 	override @property EntityType type() {return EntityType.planet;}
@@ -107,6 +110,7 @@ class Planet : Orbiting,FlatEntity {
 	
 	float[2]	getPos	() { return pos;	}
 	float	getOri	() { return ori;	}
+	bool	getInWorld	() { return inWorld	; }
 }
 
 
@@ -126,6 +130,7 @@ class Asteroid : PhysicEntity,FlatEntity {
 	
 	float[2]	getPos	() { return pos;	}
 	float	getOri	() { return ori;	}
+	bool	getInWorld	() { return inWorld	; }
 }
 class Ship : PhysicEntity,FlatEntity {
 	override @property EntityType type() {return EntityType.ship;}
@@ -141,4 +146,5 @@ class Ship : PhysicEntity,FlatEntity {
 	
 	float[2]	getPos	() { return pos;	}
 	float	getOri	() { return ori;	}
+	bool	getInWorld	() { return inWorld	; }
 }

@@ -2,6 +2,7 @@ module galactic_.logic_world_.world_;
 
 import std.experimental.logger;
 import cst_;
+import std.algorithm;
 import std.traits;
 
 import galactic_.logic_world_	.entity_	;
@@ -9,19 +10,19 @@ import galactic_.logic_world_	.entity_	;
 import galactic_.flat_world_	.world_	: FlatWorld = World	;
 import galactic_.flat_world_	.entity_	: FlatEntity = Entity	;
 
-class World{
+class World : EntityMaster {
 	this() {
 		flatWorld	= new FlatWorld;
 		foreach (_; 0..10) {
 			import std.random;
-			addEntity(new Asteroid([uniform(-100,100)*0.01,uniform(-100,100)*0.01],uniform(-100,100)*0.01,[0,0],0));
+			addEntity(new Asteroid([uniform(-100,100)*0.1,uniform(-100,100)*0.1],uniform(-100,100)*0.01,[0,0],0));
 		}
 		addEntity(new Ship());
 	}
 	
 	private Entity[]	_entities	;
 	@property Entity[] entities() {
-		return _entities~[];	// Shallow compy the array, so that only the data in the `Entity` will be affected.
+		return _entities~[];	// Shallow copy the array, so that only the data in the `Entity` will be affected.
 			// It would be far better to just pass an const(headconst(Entity)[]) but D does not support this.
 	}
 	
@@ -35,18 +36,27 @@ class World{
 	}
 	void addEntity(E)(E entity) if(!isAbstractClass!E) {
 		this._entities~=entity;
-		entity.inWorld = true;
+		entity.master = this;
+		entity.addedToWorld();
 		static if (is(E:FlatEntity)) {
 			flatWorld.addEntity(entity);
 		}
 	}
 	void removeEntity(E)(E entity) if(!isAbstractClass!E) {
-		import std.algorithm;
-		entity.inWorld = false;
+		entity.master = null;
+		entity.removedFromWorld();
 		_entities = _enties.remove(_entities.countUntil(entity));
 		static if (is(E:FlatEntity)) {
 			flatWorld.removeEntity(entity);
 		}
+	}
+	
+	
+	void onNestedAddedFlatEntity(FlatEntity entity) {
+		flatWorld.addEntity(entity);
+	}
+	void onNestedRemovedFlatEntity(FlatEntity entity) {
+		flatWorld.removeEntity(entity);
 	}
 }
 

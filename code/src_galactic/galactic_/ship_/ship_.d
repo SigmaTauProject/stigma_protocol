@@ -56,7 +56,7 @@ class Ship {
 			//---Update entities synced with cliend (update/remove)
 			foreach_reverse (i, entity; syncedEntities) {
 				if (!entity.getInWorld) {
-					//---Send Msg to client
+					//---Send Remove Msg to client
 					{
 						auto msg = RemoveMsg();
 						msg.id	= entityIds[i]	;
@@ -64,12 +64,12 @@ class Ship {
 					}
 					//---Remove reference
 					{
-						syncedEntities	.remove(i);
-						entityIds	.remove(i);
+						syncedEntities	= syncedEntities	.remove(i);
+						entityIds	= entityIds	.remove(i);
 					}
 				}
 				else {
-					//---Send Msg to client
+					//---Send Update Msg to client
 					auto msg = UpdateMsg();
 					msg.id	= entityIds[i]	;
 					msg.pos	= entity.getPos	;
@@ -87,7 +87,7 @@ class Ship {
 				syncedEntities	~=entity	;
 				//---Send Msg to client
 				auto msg = AddMsg();
-				msg.id	= entityIds[i]	;
+				msg.id	= entityIds[$-1]	;
 				msg.pos	= entity.getPos	;
 				msg.ori	= entity.getOri	;
 				network.send(msg);

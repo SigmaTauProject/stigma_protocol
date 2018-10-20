@@ -35,20 +35,20 @@ class World : EntityMaster {
 		}
 	}
 	void addEntity(E)(E entity) if(!isAbstractClass!E) {
-		this._entities~=entity;
 		entity.master = this;
+		this._entities~=entity;
 		entity.addedToWorld();
 		static if (is(E:FlatEntity)) {
 			flatWorld.addEntity(entity);
 		}
 	}
 	void removeEntity(E)(E entity) if(!isAbstractClass!E) {
-		entity.master = null;
 		entity.removedFromWorld();
-		_entities = _enties.remove(_entities.countUntil(entity));
+		_entities = _entities.remove(_entities.countUntil(entity));
 		static if (is(E:FlatEntity)) {
 			flatWorld.removeEntity(entity);
 		}
+		entity.master = null;
 	}
 	
 	

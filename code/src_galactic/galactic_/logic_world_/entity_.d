@@ -45,8 +45,8 @@ abstract class Entity : EntityMaster{
 			// It would be far better to just pass an const(headconst(Entity)[]) but D does not support this.
 	}
 	void addEntity(E)(E entity) if(!isAbstractClass!E) {
-		_nestedEntities~=entity;
 		entity.master = this;
+		_nestedEntities~=entity;
 		static if (is(E:FlatEntity)) {
 			_nestedFlatEntities ~= entity;
 			onNestedAddedFlatENtity(entity);
@@ -54,11 +54,11 @@ abstract class Entity : EntityMaster{
 	}
 	void removeEntity(E)(E entity) if(!isAbstractClass!E) {
 		_nestedEntities = _nestedEntities.remove(_nestedEntities.countUntil(entity));
-		entity.master = null;
 		static if (is(E:FlatEntity)) {
 			_nestedFlatEntities = _nestedFlatEntities.remove(_nestedFlatEntities.countUntil(entity));
 			onNestedRemovedFlatENtity(entity);
 		}
+		entity.master = null;
 	}
 	
 	EntityMaster	master	;// Set by master's addEntity;

@@ -125,6 +125,8 @@ class PhysicEntity : Entity {
 	}
 	override void update() {
 		super.update;
+		pos[]	+= vel[]	;
+		ori	+= anv	;
 	}
 	
 	float[2]	vel	;

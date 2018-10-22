@@ -5,6 +5,8 @@ import cst_;
 
 import loose_.net_msg_;
 
+import galactic_msg_.msg_template_;
+
 enum MsgType {
 	chVel	,
 }
@@ -22,23 +24,11 @@ struct UnknownMsg {
 
 
 class ChVelMsg {
-	static ChVelMsg opCall() {
-		return new ChVelMsg;
-	}
-	static ChVelMsg opCall(UnknownMsg msg) {
-		return ChVelMsg(msg.msgData);
-	}
-	static ChVelMsg opCall(const(ubyte)[] msgData) {
-		return msgData.decodeNetMsg!ChVelMsg(MsgType.chVel);
-	}
+	enum type = MsgType.chVel;
+	mixin MsgTemplate;
+	
 	@Net float[2]	vel	;
 	@Net float	anv	;
-	
-	@property
-	ubyte[] msgData() {
-		return this.encodeNetMsg(MsgType.chVel);
-	}
-	alias msgData this;
 }
 
 

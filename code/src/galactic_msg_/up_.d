@@ -3,11 +3,11 @@ module galactic_msg_.up_;
 import std.experimental.logger;
 import cst_;
 
-import loose_.net_msg_;
+import xserial;
 
 import galactic_msg_.msg_template_;
 
-enum MsgType {
+enum MsgType : ubyte {
 	chVel	,
 }
 
@@ -24,11 +24,13 @@ struct UnknownMsg {
 
 
 class ChVelMsg {
-	enum type = MsgType.chVel;
-	mixin MsgTemplate;
+	@Exclude {
+		enum type = MsgType.chVel;
+		mixin MsgTemplate;
+	}
 	
-	@Net float[2]	vel	;
-	@Net float	anv	;
+	float[2]	vel	;
+	float	anv	;
 }
 
 

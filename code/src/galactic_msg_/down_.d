@@ -3,11 +3,11 @@ module galactic_msg_.down_;
 import std.experimental.logger;
 import cst_;
 
-import loose_.net_msg_;
+import xserial;
 
 import galactic_msg_.msg_template_;
 
-enum MsgType {
+enum MsgType : ubyte {
 	add	,
 	remove	,
 	update	,
@@ -26,33 +26,41 @@ struct UnknownMsg {
 
 
 class AddMsg {
-	enum type = MsgType.add;
-	mixin MsgTemplate;
+	@Exclude {
+		enum type = MsgType.add;
+		mixin MsgTemplate;
+	}
 	
-	@Net ushort	id	;
-	@Net float[2]	pos	;
-	@Net float	ori	;
+	ushort	id	;
+	float[2]	pos	;
+	float	ori	;
 }
 class RemoveMsg {
-	enum type = MsgType.remove;
-	mixin MsgTemplate;
+	@Exclude {
+		enum type = MsgType.remove;
+		mixin MsgTemplate;
+	}
 	
-	@Net ushort	id	;
+	ushort	id	;
 }
 class UpdateMsg {
-	enum type = MsgType.update;
-	mixin MsgTemplate;
+	@Exclude {
+		enum type = MsgType.update;
+		mixin MsgTemplate;
+	}
 	
-	@Net ushort	id	;
-	@Net float[2]	pos	;
-	@Net float	ori	;
+	ushort	id	;
+	float[2]	pos	;
+	float	ori	;
 }
 class MoveAllMsg {
-	enum type = MsgType.moveAll;
-	mixin MsgTemplate;
+	@Exclude {
+		enum type = MsgType.moveAll;
+		mixin MsgTemplate;
+	}
 	
-	@Net float[2]	pos	;
-	@Net float	ori	;
+	float[2]	pos	;
+	float	ori	;
 }
 
 

@@ -13,12 +13,20 @@ mixin template  MsgTemplate(){
 		return Msg(msg.msgData);
 	}
 	static Msg opCall(const(ubyte)[] msgData) {
-		return msgData.decodeNetMsg!Msg(type);
+		assert(msgData[0] == msgData.length);
+		msgData.log;
+		type.log;
+		return msgData[2..$].deserialize!(Msg, Endian.littleEndian, ubyte);
 	}
 	
 	@property
 	const(ubyte)[] msgData() {
-		return this.encodeNetMsg(type);
+		auto data = this.serialize!(Endian.littleEndian, ubyte);
+		type.log;
+		data.log;
+		data = [(data.length+2).cst!ubyte, type.cst!ubyte]~data;
+		assert(data.length == data[0]);
+		return data;
 	}
 	alias msgData this;
 }

@@ -28,3 +28,13 @@ mixin template  MsgTemplate(){
 }
 
 
+mixin template UnknownMsgTemplate() {
+	const(ubyte)[] msgData;
+	
+	@property
+	MsgType type() {
+		assert(msgData.ptr && msgData.length>=2);
+		return msgData[1].cst!MsgType;
+	}
+}
+

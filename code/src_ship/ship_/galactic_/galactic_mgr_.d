@@ -25,9 +25,9 @@ class GalacticMgr {
 				final switch (unknownMsg.type) {
 					case MsgType.add:
 						auto msg = AddMsg(unknownMsg);
-						Entity entity = new Entity(msg.id,msg.pos,msg.ori);
+						Entity entity = new Entity(msg.pos,msg.ori);
 						entitiesById[msg.id] = entity;
-						world.entities ~= entity;
+						world.addEntity(entity);
 						break;
 					case MsgType.update:
 						auto msg = UpdateMsg(unknownMsg);
@@ -37,7 +37,7 @@ class GalacticMgr {
 						break;
 					case MsgType.remove:
 						auto msg = RemoveMsg(unknownMsg);
-						world.entities = world.entities.remove(world.entities.countUntil(entitiesById[msg.id]));
+						world.removeEntity(entitiesById[msg.id]);
 						entitiesById.remove(msg.id);
 						break;
 					case MsgType.moveAll:

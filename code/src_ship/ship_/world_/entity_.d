@@ -6,15 +6,18 @@ import cst_;
 
 class Entity {
 	this() {}
-	this(	ushort	id	,
-		float[2]	pos	,
+	this(	float[2]	pos	,
 		float	ori	,) {
 		
 		this.pos	= pos	;
 		this.ori	= ori	;
 	}
-	ushort	id	;
 	float[2]	pos	;
 	float	ori	;
+	
+	bool inWorld = false;
+	bool getInWorld() {
+		return inWorld;
+	}
 }
 

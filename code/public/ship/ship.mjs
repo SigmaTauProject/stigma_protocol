@@ -50,7 +50,6 @@ export default class Ship {
 					);
 				this.getComponent(component)["msg_"+msgType](msg);
 				////this.ship.msg_components(msg);
-				console.log(msg);
 			}
 			////if (msg.component==-1) {
 			////	this.ship["msg_"+msg.type](msg);
@@ -184,7 +183,10 @@ var downMsgType = {
 		components	: 0	,
 	},
 	metaRadar:{
-		update	: 0	,
+		add	: 0	,
+		update	: 1	,
+		remove	: 2	,
+		moveAll	: 3	,
 	},
 	metaMove:{
 		update	: 0	,
@@ -217,28 +219,56 @@ var downMsgStructure = {
 		}
 	},
 	metaRadar:{
+		add: {
+			type:"object",
+			values:[
+				{	name	: "id"	,
+					type	: "ushort"	,
+				},
+				{	name	: "pos"	,
+					type	: "array"	,
+					length	: 2	,
+					content	: {type:"float"}	,
+				},
+				{	name	: "ori"	,
+					type	: "float"	,
+				},
+			],
+		},
 		update: {
 			type:"object",
 			values:[
-				{	name	: "entities"	,
+				{	name	: "id"	,
+					type	: "ushort"	,
+				},
+				{	name	: "pos"	,
 					type	: "array"	,
-					length	: "dynamic"	,
-					
-					content:	{	type	: "object",
-							values	: [
-								{	name	: "pos"	,
-									type	: "array"	,
-									length	: 2	,
-									content	: {type:"float"}	,
-								},
-								{	name	: "ori"	,
-									type	: "float"	,
-								},
-								{	name	: "id"	,
-									type	: "ushort"	,
-								},
-							],
-						},
+					length	: 2	,
+					content	: {type:"float"}	,
+				},
+				{	name	: "ori"	,
+					type	: "float"	,
+				},
+			],
+		},
+		remove: {
+			type:"object",
+			values:[
+				{	name	: "id"	,
+					type	: "ushort"	,
+				},
+			],
+		},
+		moveAll: {
+			type:"object",
+			values:[
+				{	name	: "pos"	,
+					type	: "array"	,
+					length	: 2	,
+					content	: {type:"float"}	,
+				},
+				{	name	: "ori"	,
+					type	: "float"	,
 				},
 			],
 		},

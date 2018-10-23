@@ -15,13 +15,7 @@ enum MsgType : ubyte {
 }
 
 struct UnknownMsg {
-	const(ubyte)[] msgData;
-	
-	@property
-	MsgType type() {
-		assert(msgData.ptr && msgData.length>=2);
-		return msgData[1].cst!MsgType;
-	}
+	mixin UnknownMsgTemplate;
 }
 
 

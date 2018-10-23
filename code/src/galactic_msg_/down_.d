@@ -3,9 +3,11 @@ module galactic_msg_.down_;
 import std.experimental.logger;
 import cst_;
 
-import loose_.net_msg_;
+import xserial;
 
-enum MsgType {
+import galactic_msg_.msg_template_;
+
+enum MsgType : ubyte {
 	add	,
 	remove	,
 	update	,
@@ -24,85 +26,41 @@ struct UnknownMsg {
 
 
 class AddMsg {
-	static AddMsg opCall() {
-		return new AddMsg;
-	}
-	static AddMsg opCall(UnknownMsg msg) {
-		return AddMsg(msg.msgData);
-	}
-	static AddMsg opCall(const(ubyte)[] msgData) {
-		return msgData.decodeNetMsg!AddMsg(MsgType.add);
+	@Exclude {
+		enum type = MsgType.add;
+		mixin MsgTemplate;
 	}
 	
-	@Net ushort	id	;
-	@Net float[2]	pos	;
-	@Net float	ori	;
-	
-	@property
-	const(ubyte)[] msgData() {
-		return this.encodeNetMsg(MsgType.add);
-	}
-	alias msgData this;
+	ushort	id	;
+	float[2]	pos	;
+	float	ori	;
 }
 class RemoveMsg {
-	static RemoveMsg opCall() {
-		return new RemoveMsg;
-	}
-	static RemoveMsg opCall(UnknownMsg msg) {
-		return RemoveMsg(msg.msgData);
-	}
-	static RemoveMsg opCall(const(ubyte)[] msgData) {
-		return msgData.decodeNetMsg!RemoveMsg(MsgType.remove);
+	@Exclude {
+		enum type = MsgType.remove;
+		mixin MsgTemplate;
 	}
 	
-	@Net ushort	id	;
-	
-	@property
-	const(ubyte)[] msgData() {
-		return this.encodeNetMsg(MsgType.remove);
-	}
-	alias msgData this;
+	ushort	id	;
 }
 class UpdateMsg {
-	static UpdateMsg opCall() {
-		return new UpdateMsg;
-	}
-	static UpdateMsg opCall(UnknownMsg msg) {
-		return UpdateMsg(msg.msgData);
-	}
-	static UpdateMsg opCall(const(ubyte)[] msgData) {
-		return msgData.decodeNetMsg!UpdateMsg(MsgType.update);
+	@Exclude {
+		enum type = MsgType.update;
+		mixin MsgTemplate;
 	}
 	
-	@Net ushort	id	;
-	@Net float[2]	pos	;
-	@Net float	ori	;
-	
-	@property
-	const(ubyte)[] msgData() {
-		return this.encodeNetMsg(MsgType.update);
-	}
-	alias msgData this;
+	ushort	id	;
+	float[2]	pos	;
+	float	ori	;
 }
 class MoveAllMsg {
-	static MoveAllMsg opCall() {
-		return new MoveAllMsg;
-	}
-	static MoveAllMsg opCall(UnknownMsg msg) {
-		return MoveAllMsg(msg.msgData);
-	}
-	static MoveAllMsg opCall(const(ubyte)[] msgData) {
-		return msgData.decodeNetMsg!MoveAllMsg(MsgType.moveAll);
+	@Exclude {
+		enum type = MsgType.moveAll;
+		mixin MsgTemplate;
 	}
 	
-	@Net float[2]	pos	;
-	@Net float	ori	;
-	
-	@property
-	const(ubyte)[] msgData() {
-		return this.encodeNetMsg(MsgType.moveAll);
-	}
-	alias msgData this;
+	float[2]	pos	;
+	float	ori	;
 }
 
 

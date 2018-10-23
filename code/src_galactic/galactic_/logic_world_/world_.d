@@ -13,7 +13,7 @@ import galactic_.flat_world_	.entity_	: FlatEntity = Entity	;
 class World : EntityMaster {
 	this() {
 		flatWorld	= new FlatWorld;
-		foreach (_; 0..10) {
+		foreach (_; 0..5) {
 			import std.random;
 			addEntity(new Asteroid([uniform(-100,100)*0.1,uniform(-100,100)*0.1],uniform(-100,100)*0.01,[0,0],0));
 		}
@@ -30,10 +30,21 @@ class World : EntityMaster {
 	alias flatWorld this;
 	
 	void update() {
+		if (++counter == 5) {
+			import std.random;
+			addEntity(new Ship([0,0],0,[uniform(-100,100)*0.01,uniform(-100,100)*0.01],uniform(-100,100)*0.01));
+			if (entities.length>10) {
+				assert(entities[5].type==EntityType.ship);
+				removeEntity(entities[5].cst!Ship);
+			}
+			counter = 0;
+		}
 		foreach (entity; entities) {
 			entity.update;
 		}
 	}
+	uint counter = 0;
+	
 	void addEntity(E)(E entity) if(!isAbstractClass!E) {
 		entity.master = this;
 		this._entities~=entity;

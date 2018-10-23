@@ -3,9 +3,11 @@ module galactic_msg_.up_;
 import std.experimental.logger;
 import cst_;
 
-import loose_.net_msg_;
+import xserial;
 
-enum MsgType {
+import galactic_msg_.msg_template_;
+
+enum MsgType : ubyte {
 	chVel	,
 }
 
@@ -22,23 +24,13 @@ struct UnknownMsg {
 
 
 class ChVelMsg {
-	static ChVelMsg opCall() {
-		return new ChVelMsg;
+	@Exclude {
+		enum type = MsgType.chVel;
+		mixin MsgTemplate;
 	}
-	static ChVelMsg opCall(UnknownMsg msg) {
-		return ChVelMsg(msg.msgData);
-	}
-	static ChVelMsg opCall(const(ubyte)[] msgData) {
-		return msgData.decodeNetMsg!ChVelMsg(MsgType.chVel);
-	}
-	@Net float[2]	vel	;
-	@Net float	anv	;
 	
-	@property
-	ubyte[] msgData() {
-		return this.encodeNetMsg(MsgType.chVel);
-	}
-	alias msgData this;
+	float[2]	vel	;
+	float	anv	;
 }
 
 

@@ -7,7 +7,6 @@ import xserial;
 
 import terminal_msg_.msg_template_;
 
-import terminal_msg_.entity_;
 import terminal_msg_.component_type_;
 public import terminal_msg_.up_;
 public import terminal_msg_.meta_move_;

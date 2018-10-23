@@ -9,6 +9,7 @@ import std.range;
 static import terminal_msg_.up_;
 
 import ship_.world_	.world_	;
+import ship_.world_	.entity_	;
 import ship_.terminal_	.terminal_network_	:	TerminalNetwork	;
 
 public import terminal_msg_	.component_type_	:	ComponentType	;
@@ -40,13 +41,80 @@ class MetaRadar : Component {
 		return ComponentType.metaRadar;
 	}
 	override void update() {
-		foreach (reader; readers) {
-			sendRead(reader);
+		/*	// This comment is mostly copied from the galactic `galactic_.network_.ship_`.
+			Here we send msgs to the terminal to update its world.
+			This does not get updated when entities get added or removed.
+				I chose not to have msgs sent because it was causing to much
+				spider webed communication.  The world logic needs to be able
+				to work without thinking about networking.
+			The world.entities garantees that entities added will be added to
+				the end, thus garanteeing that world.entities will not get reordered.
+				Entities also have a `inWorld` property that gets set to false when
+				it is removed.
+			We keep an array of what the ship client sees (and the ids attached
+				each entity).  (`syncedEntities` and `entityIds`)
+			This allows a great algorithm which avoids exesive recursions of
+				either array.  We can loop through our array updating the client
+				while checking if the entity is remove.  We then know that the
+				entities we have are in world.entities and we also know they are
+				in the same order and at the beginning.  Thus, any entity in
+				`world.entities` after our last entity is a new entity.
+		*/
+		import terminal_msg_.down_meta_radar_;
+		import std.algorithm;
+		//---Update entities synced with cliend (update/remove)
+		foreach_reverse (i, entity; syncedEntities) {
+			if (!entity.getInWorld) {
+				//---Send Remove Msg to client
+				{
+					auto msg = RemoveMsg(this.id);
+					msg.id	= entityIds[i]	;
+					streamers.sendAll(msg);
+				}
+				//---Remove reference
+				{
+					syncedEntities	= syncedEntities	.remove(i);
+					entityIds	= entityIds	.remove(i);
+				}
+			}
+			else {
+				//---Send Update Msg to client
+				auto msg = UpdateMsg(this.id);
+				msg.id	= entityIds[i]	;
+				msg.pos	= entity.pos	;
+				msg.ori	= entity.ori	;
+				streamers.sendAll(msg);
+			}
 		}
-		readers = [];
-		foreach (streamer; streamers) {
-			sendRead(streamer);
+		//---Add new entities
+		Entity[] newEntities =	syncedEntities.length>0
+			? world.entities.find(syncedEntities[$-1])[1..$]
+			: world.entities;
+		syncedEntities.reserve(syncedEntities.length+newEntities.length);
+		foreach (i,entity; newEntities) {
+			entityIds	~=nextId++	;
+			syncedEntities	~=entity	;
+			//---Send Msg to client
+			auto msg = AddMsg(this.id);
+			msg.id	= entityIds[$-1]	;
+			msg.pos	= entity.pos	;
+			msg.ori	= entity.ori	;
+			streamers.sendAll(msg);
 		}
+		
+		
+		foreach (i, entity; syncedEntities) {
+			assert(entity.getInWorld);
+			auto msg = AddMsg(this.id);
+			msg.id	= entityIds[i]	;
+			msg.pos	= entity.pos	;
+			msg.ori	= entity.ori	;
+			[readers,newStreamers].sendAll(msg);
+		}
+		
+		streamers	~= newStreamers;
+		readers	= [];
+		newStreamers	= [];
 	}
 	override void onMsg(terminal_msg_.up_.UnknownMsg unknownMsg, TerminalNetwork from) {
 		import terminal_msg_.up_meta_radar_;
@@ -59,7 +127,7 @@ class MetaRadar : Component {
 			case MsgType.stream:
 				log("metaRadar msg stream:");
 				////auto msg = StreamMsg(unknownMsg);
-				streamers ~= from;
+				newStreamers ~= from;
 				break;
 		}
 	}
@@ -67,13 +135,22 @@ class MetaRadar : Component {
 	private {
 		TerminalNetwork[] readers	= []	;
 		TerminalNetwork[] streamers	= []	;
+		TerminalNetwork[] newStreamers	= []	; // Will be added to streamers once it gets updated.
 		
-		void sendRead(TerminalNetwork to) {
-			import terminal_msg_.down_meta_radar_;
-			import terminal_msg_.entity_ : Entity;
-			auto msg = UpdateMsg(this.id);
-			msg.entities = world.entities.map!((a){auto e = new Entity(); e.pos=a.pos;e.ori=a.ori;e.id=a.id;return e;}).array;
-			to.send(msg);
+		ushort[]	entityIds	= []	;
+		Entity[]	syncedEntities	= []	;
+		ushort	nextId	= 0	;
+	}
+}
+
+
+private {
+	void sendAll(TerminalNetwork[] to, const(ubyte)[] msg) {
+		sendAll([to], msg);
+	}
+	void sendAll(TerminalNetwork[][] to, const(ubyte)[] msg) {
+		foreach (group; to) foreach (network; group) {
+			network.send(msg);
 		}
 	}
 }
@@ -141,7 +218,6 @@ class MetaMove : Component {
 		
 		void sendForwardRead(TerminalNetwork to) {
 			import terminal_msg_.down_meta_move_;
-			import terminal_msg_.entity_ : Entity;
 			auto msg = UpdateMsg(this.id);
 			msg.axis	= Axis.forward	;
 			msg.value	= 0	;
@@ -149,7 +225,6 @@ class MetaMove : Component {
 		}
 		void sendStrafeRead(TerminalNetwork to) {
 			import terminal_msg_.down_meta_move_;
-			import terminal_msg_.entity_ : Entity;
 			auto msg = UpdateMsg(this.id);
 			msg.axis	= Axis.strafe	;
 			msg.value	= 0	;

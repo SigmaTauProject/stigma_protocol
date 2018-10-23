@@ -14,31 +14,30 @@ export class MetaRadar extends BaseComponent {
 		super("metaRadar", ...args);
 		this.us	= {pos:vec(),rot:0}	;
 		this.entities	= {}	;
+		this.removedThisTick	= []	;
 		this.removed	= []	;
 		
 		this.send("stream",{});
 	}
+	msg_add(msg) {
+		log("add",msg);
+		let entity = {pos:msg.pos,ori:msg.ori};
+		this.entities[msg.id] = entity;
+	}
 	msg_update(msg) {
 		log("update",msg);
-		this.removed = [];
-		this.us	= msg.us	;
-	 	for (var id of Object.keys(msg.entities)) {
-			if (id in this.entities) {
-				this.entities[id].pos	= msg.entities[id].pos	;
-				this.entities[id].ori	= msg.entities[id].ori	;
-	 		}
-			else {
-				this.entities[id] = msg.entities[id];
-			}
-	 	}
-		for (var id of Object.keys(this.entities)) {
-		 	if (!(id in msg.entities)) {
-		 		 this.removed.push(this.entities[id]);
-				delete this.entities[id];
-			}
-		}
+		let entity	= this.entities[msg.id]	;
+		entity.pos	= msg.pos	;
+		entity.ori	= msg.ori	;
+	}
+	msg_remove(msg) {
+		log("remove",msg);
+		this.removedThisTick.push(this.entities[msg.id]);
+		delete this.entities[msg.id];
 	}
 	update() {
+		this.removed = this.removedThisTick;
+		this.removedThisTick = [];
 	}
 }
 export class MetaMove extends BaseComponent {

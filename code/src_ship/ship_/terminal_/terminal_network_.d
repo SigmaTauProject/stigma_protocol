@@ -20,13 +20,9 @@ class TerminalNetworkMaster {
 			log("WebSocket connected");
 			auto newTerminal  = new TerminalNetwork(socket);
 			newTerminals ~= newTerminal;
-			while (socket.connected) {
-				sleep(10.msecs);
-				if (socket.dataAvailableForRead) {
-					newTerminal._dataAvailable = true;
-				}
+			while (newTerminal._keepVibeSocketHandlerAlive) {
+				sleep(1_000.msecs);
 			}
-			newTerminal._vibeSocketHandlerStillExists = false;
 			log("WebSocket disconnected");
 		}
 		void handleMIME(scope HTTPServerRequest req, scope HTTPServerResponse res, ref string physicalPath) {
@@ -192,10 +188,14 @@ class TerminalNetwork {
 	private WebSocket socket;
 	
 	@property bool connected() {
-		return _vibeSocketHandlerStillExists && socket.connected;
+		if (_keepVibeSocketHandlerAlive) {
+			bool c = socket.connected;
+			if (!c) _keepVibeSocketHandlerAlive = false;
+			return c;
+		}
+		return false;
 	}
-	bool _vibeSocketHandlerStillExists = true; // should only be changed by the vibe tcp connected handler function (`NetworkMaster.this.handleConnection`)
-	bool _dataAvailable = false; // Set to true by `NetworkMaster.this.handleConnection` set to false after data is read.
+	bool _keepVibeSocketHandlerAlive = true; // set to false when we are done, used in `NetworkMaster.this.handleConnection`
 	
 	//---Send
 	public {
@@ -212,10 +212,9 @@ class TerminalNetwork {
 		@property bool empty() {
 			if (current != null)
 				return false;
-			if (connected && _dataAvailable) {
+			if (connected && socket.dataAvailableForRead) {
 				try {
 					current = socket.receiveBinary();
-					_dataAvailable = false;
 				}
 				catch (Throwable e) {
 					e.log;

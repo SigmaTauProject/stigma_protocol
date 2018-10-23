@@ -3,60 +3,33 @@ module terminal_msg_.up_meta_radar_;
 import std.experimental.logger;
 import cst_;
 
-import loose_.net_msg_;
+import xserial;
 
+import terminal_msg_.msg_template_;
+
+import terminal_msg_.component_type_;
 public import terminal_msg_.up_;
 
 enum MsgType {
 	read	,
 	stream	,
 }
+enum componentType = ComponentType.metaRadar;
 
-
-
-	
-@property
-MsgType type(UnknownMsg msg) {
-	assert(msg.msgData.ptr && msg.msgData.length>=3);
-	return msg.msgData[2].cst!MsgType;
-}
-
-
+mixin TypeTemplate;
 
 class ReadMsg {
-	static ReadMsg opCall() {
-		return new ReadMsg;
+	@Exclude {
+		enum type = MsgType.read;
+		mixin MsgTemplate;
 	}
-	static ReadMsg opCall(UnknownMsg msg) {
-		return ReadMsg(msg.msgData);
-	}
-	static ReadMsg opCall(const(ubyte)[] msgData) {
-		return msgData.decodeNetMsg!ReadMsg([msgData[1], MsgType.read.cst!ubyte]);
-	}
-	
-	@property
-	ubyte[] msgData() {
-		return this.encodeNetMsg([msgData[1], MsgType.read.cst!ubyte]);
-	}
-	alias msgData this;
 }
 
 class StreamMsg {
-	static StreamMsg opCall() {
-		return new StreamMsg;
+	@Exclude {
+		enum type = MsgType.stream;
+		mixin MsgTemplate;
 	}
-	static StreamMsg opCall(UnknownMsg msg) {
-		return StreamMsg(msg.msgData);
-	}
-	static StreamMsg opCall(const(ubyte)[] msgData) {
-		return msgData.decodeNetMsg!StreamMsg([msgData[1], MsgType.stream.cst!ubyte]);
-	}
-	
-	@property
-	ubyte[] msgData() {
-		return this.encodeNetMsg([msgData[1], MsgType.stream.cst!ubyte]);
-	}
-	alias msgData this;
 }
 
 

@@ -3,33 +3,28 @@ module terminal_msg_.down_meta_radar_;
 import std.experimental.logger;
 import cst_;
 
-import loose_.net_msg_;
-
-import terminal_msg_.entity_;
-public import terminal_msg_.up_;
+import xserial;
 
 import terminal_msg_.msg_template_;
+
+import terminal_msg_.entity_;
+import terminal_msg_.component_type_;
+public import terminal_msg_.up_;
 
 enum MsgType : ubyte {
 	update	,
 }
+enum componentType = ComponentType.metaRadar;
 
-
-
-	
-@property
-MsgType type(UnknownMsg msg) {
-	assert(msg.msgData.ptr && msg.msgData.length>=3);
-	return msg.msgData[2].cst!MsgType;
-}
-
-
+mixin TypeTemplate;
 
 class UpdateMsg {
-	enum type = MsgType.update;
-	mixin MsgTemplate;
+	@Exclude {
+		enum type = MsgType.update;
+		mixin MsgTemplate;
+	}
 	
-	@Net Entity[] entities;
+	Entity[] entities;
 }
 
 

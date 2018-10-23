@@ -3,9 +3,12 @@ module terminal_msg_.down_meta_move_;
 import std.experimental.logger;
 import cst_;
 
-import loose_.net_msg_;
+import xserial;
+
+import terminal_msg_.msg_template_;
 
 import terminal_msg_.entity_;
+import terminal_msg_.component_type_;
 public import terminal_msg_.up_;
 public import terminal_msg_.meta_move_;
 
@@ -13,24 +16,18 @@ public import terminal_msg_.meta_move_;
 enum MsgType {
 	update	,
 }
+enum componentType = ComponentType.metaMove;
 
-
-
-	
-@property
-MsgType type(UnknownMsg msg) {
-	assert(msg.msgData.ptr && msg.msgData.length>=3);
-	return msg.msgData[2].cst!MsgType;
-}
-
-
+mixin TypeTemplate;
 
 class UpdateMsg {
-	enum type = MsgType.update;
-	mixin MsgTemplate;
+	@Exclude {
+		enum type = MsgType.update;
+		mixin MsgTemplate;
+	}
 	
-	@Net Axis	axis	;
-	@Net float	value	;
+	Axis	axis	;
+	float	value	;
 }
 
 

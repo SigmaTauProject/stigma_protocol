@@ -29,11 +29,16 @@ abstract class Entity : EntityMaster{
 	this(float[2] pos, float ori) {
 		this.pos	= pos	;
 		this.ori	= ori	;
+		callSubInits;
 	}
 	void update() {
+		callSubUpdates;
 		foreach (entity; nestedEntities) 
 			entity.update;
 	}
+	////abstract void init();
+	abstract protected void callSubInits();
+	abstract protected void callSubUpdates();
 	private Entity[]	_nestedEntities	= [];
 	private FlatEntity[]	_nestedFlatEntities	= [];
 	@property Entity[] nestedEntities() {
@@ -113,18 +118,40 @@ abstract class Entity : EntityMaster{
 			
 	bool	inWorld	= false	; // Changed in `world.addEntity` and `.removeEntity`
 }
-private abstract
-class PhysicEntity : Entity {
-	this() {
-		super();
+
+
+mixin template EntityTemplate() {
+	override protected void callSubInits() {
+		callSub!"init";
 	}
-	this(float[2] pos,float ori, float[2] vel,float anv,) {
-		super(pos,ori);
-		this.vel	= vel	;
-		this.anv	= anv	;
+	override protected void callSubUpdates() {
+		callSub!"update";
 	}
-	override void update() {
-		super.update;
+	private void callSub(string prefix)() {
+		import std.traits;
+		static foreach (mem; __traits(allMembers, typeof(this))) {
+			static if (mem.startsWith(prefix~'_')) {
+				pragma(msg, mem);
+				__traits(getMember, this, mem)();
+			}
+		}
+		static foreach (mem; __traits(allMembers, typeof(this))) {
+			static if (mem.startsWith("late_"~prefix~'_')) {
+				pragma(msg, mem);
+				__traits(getMember, this, mem)();
+			}
+		}
+	}
+}
+
+mixin template FlatEntityTemplate() {
+	float[2]	getPos	() { return pos	; }
+	float	getOri	() { return ori	; }
+	bool	getInWorld	() { return inWorld	; }
+}
+
+mixin template PhysicsTemplate() {
+	void late_update_physics() {
 		pos[]	+= vel[]	;
 		ori	+= anv	;
 	}
@@ -134,98 +161,98 @@ class PhysicEntity : Entity {
 }
 
 
+
 class StarSystem : Entity {
 	override @property EntityType type() {return EntityType.starSystem;}
+	
 	this() {
 		super();
 	}
-	this(float[2] pos, float ori) {
-		super(pos,ori);
-	}
-	override void update() {
-		super.update;
-	}
+	
+	mixin EntityTemplate	;
 }
 
 
-private abstract
-class Orbiting : Entity {
-	this() {
-		super();
-	}
-	this(float[2] pos, float ori) {
-		super(pos,ori);
-	}
-	override void update() {
-		super.update;
-	}
-}
-
-class Sun : Orbiting,FlatEntity {
+class Sun : Entity,FlatEntity {
 	override @property EntityType type() {return EntityType.sun;}
+	
 	this() {
 		super();
 	}
-	this(float[2] pos, float ori) {
-		super(pos,ori);
-	}
-	override void update() {
-		super.update;
-	}
 	
-	float[2]	getPos	() { return pos	; }
-	float	getOri	() { return ori	; }
-	bool	getInWorld	() { return inWorld	; }
+	mixin EntityTemplate	;
+	mixin FlatEntityTemplate	;
 }
-class Planet : Orbiting,FlatEntity {
+class Planet : Entity,FlatEntity {
 	override @property EntityType type() {return EntityType.planet;}
+	
 	this() {
 		super();
 	}
-	this(float[2] pos, float ori) {
-		super(pos,ori);
-	}
-	override void update() {
-		super.update;
-	}
 	
-	float[2]	getPos	() { return pos;	}
-	float	getOri	() { return ori;	}
-	bool	getInWorld	() { return inWorld	; }
+	mixin EntityTemplate	;
+	mixin FlatEntityTemplate	;
 }
 
 
 
 
-class Asteroid : PhysicEntity,FlatEntity {
+class Asteroid : Entity,FlatEntity {
 	override @property EntityType type() {return EntityType.asteroid;}
+	
 	this() {
 		super();
 	}
 	this(float[2] pos,float ori, float[2] vel,float anv,) {
-		super(pos,ori,vel,anv);
-	}
-	override void update() {
-		super.update;
+		super(pos, ori);
+		this.vel	= vel	;
+		this.anv	= anv	;
 	}
 	
-	float[2]	getPos	() { return pos;	}
-	float	getOri	() { return ori;	}
-	bool	getInWorld	() { return inWorld	; }
+	mixin EntityTemplate	;
+	mixin PhysicsTemplate	;
+	mixin FlatEntityTemplate	;
 }
-class Ship : PhysicEntity,FlatEntity {
+class Ship : Entity,FlatEntity {
 	override @property EntityType type() {return EntityType.ship;}
+	
 	this() {
 		super();
 	}
 	this(float[2] pos,float ori, float[2] vel,float anv,) {
-		super(pos,ori,vel,anv);
-	}
-	override void update() {
-		super.update;
+		super(pos, ori);
+		this.vel	= vel	;
+		this.anv	= anv	;
 	}
 	
-	float[2]	getPos	() { return pos;	}
-	float	getOri	() { return ori;	}
-	bool	getInWorld	() { return inWorld	; }
+	mixin EntityTemplate	;
+	mixin PhysicsTemplate	;
+	mixin FlatEntityTemplate	;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,7 +1,5 @@
 module terminal_msg_.up_meta_radar_;
-
-import std.experimental.logger;
-import cst_;
+import commonImports;
 
 import xserial;
 

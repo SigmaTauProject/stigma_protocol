@@ -1,6 +1,5 @@
 module galactic_.network_.network_;
-
-import std.experimental.logger;
+import commonImports;
 
 import vibe.core.core : sleep;
 import vibe.core.net;
@@ -10,8 +9,6 @@ import core.time;
 import std.socket;
 
 import loose_.to_msg_;
-
-import cst_;
 
 class NetworkMaster {
 	this() {

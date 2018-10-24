@@ -1,7 +1,5 @@
 module galactic_.ship_.ship_;
-
-import std.experimental.logger;
-import cst_;
+import commonImports;
 
 import loose_.sleep_;
 import core.time;
@@ -10,7 +8,6 @@ import galactic_.flat_world_	.world_	:	World	;
 import galactic_.flat_world_	.entity_	:	Entity	;
 import galactic_.network_	.network_	:	Network	;
 
-import std.algorithm.iteration	;
 import std.range	:	array	;
 
 class Ship {
@@ -52,7 +49,6 @@ class Ship {
 				    `world.entities` after our last entity is a new entity.
 			*/
 			import galactic_msg_.down_;
-			import std.algorithm;
 			//---Update entities synced with cliend (update/remove)
 			foreach_reverse (i, entity; syncedEntities) {
 				if (!entity.getInWorld) {

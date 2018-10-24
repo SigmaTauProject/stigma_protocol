@@ -1,9 +1,6 @@
 module ship_.terminal_.components_;
+import commonImports;
 
-import std.experimental.logger;
-import cst_;
-
-import std.algorithm.iteration;
 import std.range;
 
 static import terminal_msg_.up_;
@@ -61,7 +58,6 @@ class MetaRadar : Component {
 				`world.entities` after our last entity is a new entity.
 		*/
 		import terminal_msg_.down_meta_radar_;
-		import std.algorithm;
 		//---Update entities synced with cliend (update/remove)
 		foreach_reverse (i, entity; syncedEntities) {
 			if (!entity.getInWorld) {

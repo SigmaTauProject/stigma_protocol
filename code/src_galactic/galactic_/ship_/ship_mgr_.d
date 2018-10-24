@@ -1,7 +1,5 @@
 module galactic_.ship_.ship_mgr_;
-
-import std.experimental.logger;
-import cst_;
+import commonImports;
 
 import loose_.sleep_;
 import core.time;

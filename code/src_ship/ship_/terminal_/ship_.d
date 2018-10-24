@@ -1,9 +1,5 @@
 module ship_.terminal_.ship_;
-
-import std.experimental.logger;
-import cst_;
-
-import std.algorithm.iteration;
+import commonImports;
 
 static import terminal_msg_.up_;
 

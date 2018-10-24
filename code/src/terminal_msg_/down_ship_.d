@@ -1,7 +1,5 @@
 module terminal_msg_.down_ship_;
-
-import std.experimental.logger;
-import cst_;
+import commonImports;
 
 import xserial;
 

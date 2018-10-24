@@ -1,8 +1,5 @@
 module ship_.world_.entity_;
-
-import std.experimental.logger;
-import cst_;
-
+import commonImports;
 
 class Entity {
 	this() {}

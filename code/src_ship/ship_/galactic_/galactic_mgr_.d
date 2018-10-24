@@ -1,15 +1,10 @@
 module ship_.galactic_.galactic_mgr_;
-
-import std.experimental.logger;
-import cst_;
+import commonImports;
 
 import ship_.world_	.world_	:	World	;
 import ship_.galactic_	.galactic_network_	:	GalacticNetwork	;
 import ship_.world_	.entity_	:	Entity	;
 
-import std.algorithm.iteration;
-import std.algorithm.searching;
-import std.algorithm.mutation;
 import std.range;
 
 class GalacticMgr {

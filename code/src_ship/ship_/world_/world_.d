@@ -1,7 +1,5 @@
 module ship_.world_.world_;
-
-import std.experimental.logger;
-import cst_;
+import commonImports;
 
 import ship_.world_	.entity_;
 
@@ -24,7 +22,6 @@ class World {
 	void removeEntity(Entity entity) {
 		/*	For network communtion the garantee must be made that entities are never reordered.
 		*/
-		import std.algorithm;
 		_entities = _entities.remove(_entities.countUntil(entity));
 		entity.inWorld=false;
 	}

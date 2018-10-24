@@ -1,6 +1,5 @@
 module galactic_.main_;
-
-import std.experimental.logger;
+import commonImports;
 
 import galactic_.network_	.network_;
 import galactic_.ship_	.ship_mgr_;

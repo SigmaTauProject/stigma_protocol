@@ -1,7 +1,5 @@
 module galactic_msg_.msg_template_;
-
-import std.experimental.logger;
-import cst_;
+import commonImports;
 
 
 mixin template  MsgTemplate(){

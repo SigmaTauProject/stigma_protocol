@@ -1,8 +1,6 @@
 module galactic_.logic_world_.world_;
+import commonImports;
 
-import std.experimental.logger;
-import cst_;
-import std.algorithm;
 import std.traits;
 
 import galactic_.logic_world_	.entity_	;

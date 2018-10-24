@@ -1,8 +1,5 @@
 module galactic_.logic_world_.entity_;
-
-import std.experimental.logger;
-import cst_;
-import std.algorithm;
+import commonImports;
 
 import galactic_.flat_world_	.entity_	: FlatEntity = Entity	;
 

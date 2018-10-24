@@ -1,6 +1,5 @@
 module ship_.galactic_.galactic_network_;
-
-import std.experimental.logger;
+import commonImports;
 
 import vibe.core.net;
 import eventcore.driver	: IOMode;

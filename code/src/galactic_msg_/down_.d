@@ -1,7 +1,5 @@
 module galactic_msg_.down_;
-
-import std.experimental.logger;
-import cst_;
+import commonImports;
 
 import xserial;
 

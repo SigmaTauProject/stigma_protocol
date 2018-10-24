@@ -1,7 +1,5 @@
 module galactic_.world_.entity_;
-
-import std.experimental.logger;
-import cst_;
+import commonImports;
 
 interface Entity {
 	float[2]	pos()	;

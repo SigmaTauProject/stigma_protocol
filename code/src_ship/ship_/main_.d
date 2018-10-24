@@ -1,7 +1,5 @@
 module ship_.main_;
-
-import std.experimental.logger;
-import cst_;
+import commonImports;
 
 import ship_.world_	.world_	;
 import ship_.galactic_	.galactic_network_	;
@@ -11,8 +9,6 @@ import ship_.terminal_	.ship_	;
 
 import loose_.sleep_ : sleep;
 import core.time;
-
-import std.algorithm.iteration;
 
 class Main {
 	this() {

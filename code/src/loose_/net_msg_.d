@@ -1,7 +1,5 @@
 module loose_.net_msg_;
-
-import std.experimental.logger;
-import cst_;
+import commonImports;
 
 import std.traits;
 

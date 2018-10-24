@@ -1,7 +1,5 @@
 module galactic_.flat_world_.world_;
-
-import std.experimental.logger;
-import cst_;
+import commonImports;
 
 import galactic_.flat_world_	.entity_;
 

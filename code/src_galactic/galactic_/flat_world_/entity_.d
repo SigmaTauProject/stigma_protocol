@@ -1,7 +1,5 @@
 module galactic_.flat_world_.entity_;
-
-import std.experimental.logger;
-import cst_;
+import commonImports;
 
 
 interface Entity {

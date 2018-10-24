@@ -43,8 +43,8 @@ class TerminalNetworkMaster {
 			auto fileServerSettings = new HTTPFileServerSettings;
 			fileServerSettings.encodingFileExtension = ["gzip" : ".gz"];
 			fileServerSettings.preWriteCallback = &handleMIME;
-			router.get("/gzip/*", serveStaticFiles("./public/", fileServerSettings));
-			router.get("*", serveStaticFiles("./public/", fileServerSettings));
+			router.get("/gzip/*", serveStaticFiles("./public/terminal", fileServerSettings));
+			router.get("*", serveStaticFiles("./public/terminal", fileServerSettings));
 			
 			listenHTTP(settings, router);
 			

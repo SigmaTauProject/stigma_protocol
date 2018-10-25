@@ -1,8 +1,8 @@
-name "neeeeew"
-description "A minimal D application."
-authors "jonathan"
-copyright "Copyright © 2018, jonathan"
-license "proprietary"
+name "SigmaTau"
+description "Spaceship Bridge Simulator"
+authors "Jonathan"
+copyright "Copyright © 2018, Jonathan Levi"
+license "MIT"
 
 targetPath	"build"
 sourcePaths	"src" "src_galactic" "src_ship"

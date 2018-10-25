@@ -15,7 +15,6 @@ class World : EntityMaster {
 			import std.random;
 			addEntity(new Asteroid([uniform(-100,100)*0.1,uniform(-100,100)*0.1],uniform(-100,100)*0.01,[0,0],0));
 		}
-		addEntity(new Ship());
 	}
 	
 	private Entity[]	_entities	;
@@ -37,7 +36,7 @@ class World : EntityMaster {
 		}
 		if (++counter == 5) {
 			import std.random;
-			addEntity(new Asteroid([0,0],0,[uniform(-100,100)*0.01,uniform(-100,100)*0.01],uniform(-100,100)*0.01));
+			addEntity(new Asteroid([-1,0],1,[uniform(-100,100)*0.01,uniform(-100,100)*0.01],uniform(-100,100)*0.01));
 			if (entities.length>15) {
 				foreach (i; 5..entities.length) {
 					if (entities[i].type==EntityType.asteroid) {

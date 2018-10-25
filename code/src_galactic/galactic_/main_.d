@@ -12,12 +12,13 @@ class Main {
 	this(int gameTick) {
 		auto network	= new NetworkMaster	;
 		auto world	= new World	;
-		auto shipMgr	= new ShipMgr(world, gameTick)	;
+		auto shipMgr	= new ShipMgr(world/*Implicitly cast to FlatWorld*/, gameTick)	;
 		
 		while (true) {
 			sleep(gameTick.msecs);
-			world	.update()	;
-			shipMgr	.update(network.getNewNetworks())	;
+			auto newNetworks	= network	.getNewNetworks()	;
+			auto newPlayerShips	= world	.update(newNetworks.length)	;
+			shipMgr		.update(newNetworks, newPlayerShips)	;
 		}
 	}
 }

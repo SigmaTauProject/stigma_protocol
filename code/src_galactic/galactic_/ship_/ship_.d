@@ -7,12 +7,14 @@ import core.time;
 import galactic_.flat_world_	.world_	:	World	;
 import galactic_.flat_world_	.entity_	:	Entity	;
 import galactic_.network_	.network_	:	Network	;
+import galactic_.logic_world_	.ship_	:	ShipEntity = Ship	;
 
 import std.range	:	array	;
 
 class Ship {
-	this(World world, Network network) {
+	this(World world, ShipEntity shipEntity, Network network) {
 		this.world	= world	;
+		this.shipEntity	= shipEntity	;
 		this.network	= network	;
 	}
 	void update() {
@@ -93,6 +95,7 @@ class Ship {
 	
 	private {
 		World	world	;
+		ShipEntity	shipEntity	;
 		Network	network	;
 		
 		ushort[]	entityIds	= []	;

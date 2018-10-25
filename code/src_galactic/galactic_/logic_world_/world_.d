@@ -27,19 +27,31 @@ class World : EntityMaster {
 	FlatWorld	flatWorld	;
 	alias flatWorld this;
 	
-	void update() {
+	Ship[] update(size_t numNewPlayers) {
+		Ship[] newPlayerShips = [];
+		foreach (_; 0..numNewPlayers) {
+			newPlayerShips ~= new Ship([0,0],0,[0,0],0);
+		}
+		foreach (ship; newPlayerShips) {
+			addEntity(ship);
+		}
 		if (++counter == 5) {
 			import std.random;
-			addEntity(new Ship([0,0],0,[uniform(-100,100)*0.01,uniform(-100,100)*0.01],uniform(-100,100)*0.01));
-			if (entities.length>10) {
-				assert(entities[5].type==EntityType.ship);
-				removeEntity(entities[5].cst!Ship);
+			addEntity(new Asteroid([0,0],0,[uniform(-100,100)*0.01,uniform(-100,100)*0.01],uniform(-100,100)*0.01));
+			if (entities.length>15) {
+				foreach (i; 5..entities.length) {
+					if (entities[i].type==EntityType.asteroid) {
+						removeEntity(entities[i].cst!Asteroid);
+						break;
+					}
+				}	
 			}
 			counter = 0;
 		}
 		foreach (entity; entities) {
 			entity.update;
 		}
+		return newPlayerShips;
 	}
 	uint counter = 0;
 	

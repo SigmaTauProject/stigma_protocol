@@ -12,9 +12,9 @@ import galactic_.logic_world_	.ship_	:	ShipEntity = Ship	;
 import std.range	:	array	;
 
 class Ship {
-	this(World world, ShipEntity shipEntity, Network network) {
+	this(World world, ShipEntity selfEntity, Network network) {
 		this.world	= world	;
-		this.shipEntity	= shipEntity	;
+		this.selfEntity	= selfEntity	;
 		this.network	= network	;
 	}
 	void update() {
@@ -81,21 +81,23 @@ class Ship {
 				: world.entities;
 			syncedEntities.reserve(syncedEntities.length+newEntities.length);
 			foreach (i,entity; newEntities) {
-				entityIds	~=nextId++	;
-				syncedEntities	~=entity	;
-				//---Send Msg to client
-				auto msg = AddMsg();
-				msg.id	= entityIds[$-1]	;
-				msg.pos	= entity.getPos	;
-				msg.ori	= entity.getOri	;
-				network.send(msg);
+				if (entity!=selfEntity) {
+					entityIds	~=nextId++	;
+					syncedEntities	~=entity	;
+					//---Send Msg to client
+					auto msg = AddMsg();
+					msg.id	= entityIds[$-1]	;
+					msg.pos	= entity.getPos	;
+					msg.ori	= entity.getOri	;
+					network.send(msg);
+				}
 			}
 		}
 	}
 	
 	private {
 		World	world	;
-		ShipEntity	shipEntity	;
+		ShipEntity	selfEntity	;
 		Network	network	;
 		
 		ushort[]	entityIds	= []	;

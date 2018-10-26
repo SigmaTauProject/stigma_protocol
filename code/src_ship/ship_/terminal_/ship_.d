@@ -13,7 +13,7 @@ class Ship {
 		this.addComponent(ComponentType.metaRadar);
 		this.addComponent(ComponentType.metaMove);
 	}
-	void update(TerminalNetwork[] newTerminals) {
+	const(ubyte[])[] update(TerminalNetwork[] newTerminals) {
 		terminals ~= newTerminals;
 		//---Send to new
 		foreach (term; newTerminals) {
@@ -54,6 +54,13 @@ class Ship {
 			if (!(component is null)) {
 				component.update();
 			}
+		}
+		{
+			import galactic_msg_.up_;
+			auto msg = new ChVelMsg;
+			msg.vel	= [0,0.1];
+			msg.anv	= 0.01;
+			return [msg];
 		}
 	}
 	

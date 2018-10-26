@@ -4,6 +4,7 @@ import commonImports;
 import loose_.sleep_;
 import core.time;
 
+import loose_	.vec_math_	;
 import galactic_.flat_world_	.world_	:	World	;
 import galactic_.flat_world_	.entity_	:	Entity	;
 import galactic_.network_	.network_	:	Network	;
@@ -72,7 +73,9 @@ class Ship {
 					//---Send Update Msg to client
 					auto msg = UpdateMsg();
 					msg.id	= entityIds[i]	;
-					msg.pos	= entity.getPos[]	-selfEntity.pos[]	;
+					float[2] relPos;
+					relPos = entity.getPos[]-selfEntity.pos[];
+					msg.pos	= rotate(relPos, selfEntity.ori)	;
 					msg.ori	= entity.getOri	-selfEntity.ori	;
 					network.send(msg);
 				}
@@ -89,7 +92,9 @@ class Ship {
 					//---Send Msg to client
 					auto msg = AddMsg();
 					msg.id	= entityIds[$-1]	;
-					msg.pos	= entity.getPos[]	-selfEntity.pos[]	;
+					float[2] relPos;
+					relPos = entity.getPos[]-selfEntity.pos[];
+					msg.pos	= rotate(relPos, selfEntity.ori)	;
 					msg.ori	= entity.getOri	-selfEntity.ori	;
 					network.send(msg);
 				}

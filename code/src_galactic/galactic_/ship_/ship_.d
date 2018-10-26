@@ -25,6 +25,8 @@ class Ship {
 				final switch (unknownMsg.type) {
 					case MsgType.chVel:
 						auto msg = ChVelMsg(unknownMsg);
+						selfEntity.giveThrust(msg.vel);
+						selfEntity.giveTorque(msg.anv);
 						msg.vel.log(msg.anv);
 						break;
 				}

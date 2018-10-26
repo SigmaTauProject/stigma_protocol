@@ -72,8 +72,8 @@ class Ship {
 					//---Send Update Msg to client
 					auto msg = UpdateMsg();
 					msg.id	= entityIds[i]	;
-					msg.pos	= entity.getPos	;
-					msg.ori	= entity.getOri	;
+					msg.pos	= entity.getPos[]	-selfEntity.pos[]	;
+					msg.ori	= entity.getOri	-selfEntity.ori	;
 					network.send(msg);
 				}
 			}
@@ -89,8 +89,8 @@ class Ship {
 					//---Send Msg to client
 					auto msg = AddMsg();
 					msg.id	= entityIds[$-1]	;
-					msg.pos	= entity.getPos	;
-					msg.ori	= entity.getOri	;
+					msg.pos	= entity.getPos[]	-selfEntity.pos[]	;
+					msg.ori	= entity.getOri	-selfEntity.ori	;
 					network.send(msg);
 				}
 			}

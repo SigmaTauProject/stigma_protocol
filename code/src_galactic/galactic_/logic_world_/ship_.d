@@ -1,8 +1,9 @@
 module galactic_.logic_world_.ship_;
 import commonImports;
 
+import loose_	.vec_math_	;
 import galactic_.flat_world_	.entity_	: FlatEntity = Entity	;
-import galactic_.logic_world_	.entity_;
+import galactic_.logic_world_	.entity_	;
 
 class Ship : Entity,FlatEntity {
 	override @property EntityType type() {return EntityType.ship;}

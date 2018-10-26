@@ -1,6 +1,7 @@
 module galactic_.logic_world_.entity_;
 import commonImports;
 
+import loose_.vec_math_;
 import galactic_.flat_world_	.entity_	: FlatEntity = Entity	;
 public import galactic_.logic_world_.ship_;
 
@@ -146,19 +147,6 @@ mixin template FlatEntityTemplate() {
 	float[2]	getPos	() { return pos	; }
 	float	getOri	() { return ori	; }
 	bool	getInWorld	() { return inWorld	; }
-}
-
-package(galactic_.logic_world_) float[2] rotate(float[2] vec, float angle) {
-	import std.math;
-	auto c = cos(angle)	;
-	auto s = sin(angle)	;
-	auto x = vec[0]	;
-	auto y = vec[1]	;
-	
-	float[2] newVec = [	x * c - y * s	,
-		x * s + y * c	];
-	
-	return newVec;
 }
 
 mixin template PhysicsTemplate() {

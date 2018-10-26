@@ -13,7 +13,6 @@ class GalacticMgr {
 		this.network	= network	;
 	}
 	void update() {
-		import loose_.net_msg_;
 		{
 			import galactic_msg_.down_;
 			foreach (unknownMsg; network.map!(msgData=>UnknownMsg(msgData))) {

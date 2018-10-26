@@ -17,7 +17,6 @@ class Ship {
 		terminals ~= newTerminals;
 		//---Send to new
 		foreach (term; newTerminals) {
-			import loose_.net_msg_;
 			import terminal_msg_.down_ship_;
 			auto msg = ComponentsMsg();
 			msg.components = this.componentTypes;
@@ -25,7 +24,6 @@ class Ship {
 		}
 		//---Get msgs
 		foreach (term; this.terminals) {
-			import loose_.net_msg_;
 			import terminal_msg_.up_;
 			foreach (unknownMsg; term.map!(msgData=>UnknownMsg(msgData))) {
 				unknownMsg.msgData.log;

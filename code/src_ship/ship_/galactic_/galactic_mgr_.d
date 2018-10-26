@@ -47,6 +47,14 @@ class GalacticMgr {
 		////	network.send(msg);
 		////}
 	}
+	void send(const(ubyte[][]) msgs) {
+		foreach (msg; msgs) {
+			send(msg);
+		}
+	}
+	void send(const(ubyte[]) msg) {
+		network.send(msg);
+	}
 	
 	private {
 		World	world	;

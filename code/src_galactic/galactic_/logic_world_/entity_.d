@@ -148,6 +148,18 @@ mixin template FlatEntityTemplate() {
 	bool	getInWorld	() { return inWorld	; }
 }
 
+private float[2] rotate(float[2] vec, float angle) {
+	auto c = cos(angle)	;
+	auto s = sin(angle)	;
+	auto x = a[0]	;
+	auto y = a[1]	;
+	
+	float[2] newVec = [	x * c - y * s	,
+		x * s + y * c	];
+	
+	return newVec;
+}
+
 mixin template PhysicsTemplate() {
 	void late_update_physics() {
 		pos[]	+= vel[]	;
@@ -156,6 +168,13 @@ mixin template PhysicsTemplate() {
 	
 	float[2]	vel	;
 	float	anv	;
+
+	void giveThrust(float[2] thrust) {
+		this.vel[] += thrust.rotate(this.ori);
+	}
+	void giveTorque(float torque) {
+		this.anv += torgue;
+	}
 }
 
 

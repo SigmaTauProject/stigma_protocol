@@ -20,8 +20,9 @@ class Main {
 		
 		while (true) {
 			sleep(200.msecs);
-			galacticMgr.update();
-			ship.update(terminalNetworkMaster.getNewTerminals());
+			galacticMgr	.update	( 	);
+			auto msgs = ship	.update	( terminalNetworkMaster.getNewTerminals()	);
+			galacticMgr	.send	( msgs	);
 		}
 	}
 }

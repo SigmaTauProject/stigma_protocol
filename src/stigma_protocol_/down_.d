@@ -1,22 +1,21 @@
-module terminal_msg_.down_meta_radar_;
+module stigma_protocol_.down_;
 import commonImports;
 
 import xserial;
 
-import terminal_msg_.msg_template_;
-
-import terminal_msg_.component_type_;
-public import terminal_msg_.up_;
+import stigma_protocol_.msg_template_;
 
 enum MsgType : ubyte {
 	add	,
-	update	,
 	remove	,
+	update	,
 	moveAll	,
 }
-enum componentType = ComponentType.metaRadar;
 
-mixin TypeTemplate;
+struct UnknownMsg {
+	mixin UnknownMsgTemplate;
+}
+
 
 class AddMsg {
 	@Exclude {

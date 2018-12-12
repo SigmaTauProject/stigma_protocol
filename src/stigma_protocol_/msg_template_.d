@@ -1,4 +1,4 @@
-module galactic_msg_.msg_template_;
+module stigma_protocol_.msg_template_;
 import commonImports;
 
 

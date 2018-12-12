@@ -1,9 +1,0 @@
-code/.dub
-code/docs.json
-code/__dummy.html
-code/docs/
-code/build/
-*.exe
-*.o
-*.obj
-*.lst

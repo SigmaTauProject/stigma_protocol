@@ -1,9 +1,9 @@
-module galactic_msg_.up_;
+module stigma_protocol_.up_;
 import commonImports;
 
 import xserial;
 
-import galactic_msg_.msg_template_;
+import stigma_protocol_.msg_template_;
 
 enum MsgType : ubyte {
 	chVel	,
